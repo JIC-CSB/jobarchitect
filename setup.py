@@ -2,6 +2,7 @@ from setuptools import setup
 
 version = "0.1.0"
 readme = open('README.rst').read()
+url = "https://github.com/JIC-CSB/jobarchitect"
 
 setup(name="jobarchitect",
       packages=["jobarchitect"],
