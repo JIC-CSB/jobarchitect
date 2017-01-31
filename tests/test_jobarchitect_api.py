@@ -139,3 +139,77 @@ def test_output_path_from_hash():
 
     with pytest.raises(KeyError):
         output_path_from_hash(TEST_SAMPLE_DATASET, 'nonsense', '/output')
+
+
+def test_generate_bash_job_single_line():
+    from jobarchitect import generate_bash_job
+    from collections import namedtuple
+
+    JobSpec = namedtuple(
+        'JobSpec',
+        ['program_name',
+         'dataset_path',
+         'output_root',
+         'hash_ids'
+         ]
+    )
+
+    parameters = dict(
+        program_name='shasum',
+        dataset_path='/data',
+        output_root='/output',
+        hash_ids='c827a1a1a61e734828f525ae7715d9c5be591496',
+
+    )
+    expected_output = """#!/bin/bash
+_analyse_by_id \
+  --program_name={program_name} \
+  --input_dataset_path={dataset_path} \
+  --output_root={output_root} \
+  {hash_ids}
+    """.format(**parameters)
+
+    input_job = JobSpec(
+        'shasum',
+        '/data',
+        '/output',
+        'c827a1a1a61e734828f525ae7715d9c5be591496')
+
+    actual_output = generate_bash_job(input_job)
+
+
+def test_generate_bash_job_multi_line():
+    from jobarchitect import generate_bash_job
+    from collections import namedtuple
+
+    JobSpec = namedtuple(
+        'JobSpec',
+        ['program_name',
+         'dataset_path',
+         'output_root',
+         'hash_ids'
+         ]
+    )
+
+    parameters = dict(
+        program_name='shasum',
+        dataset_path='/data',
+        output_root='/output',
+        hash_ids='1 2',
+
+    )
+    expected_output = """#!/bin/bash
+_analyse_by_id \
+  --program_name={program_name} \
+  --input_dataset_path={dataset_path} \
+  --output_root={output_root} \
+  {hash_ids}
+    """.format(**parameters)
+
+    input_job = JobSpec(
+        'shasum',
+        '/data',
+        '/output',
+        '1 2')
+
+    actual_output = generate_bash_job(input_job)
