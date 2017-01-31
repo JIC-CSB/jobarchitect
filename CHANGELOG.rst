@@ -11,6 +11,8 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
+- ``jobarchitect.mkdir_parents`` function
+- ``jobarchitect.output_path_from_hash`` function
 - ``jobarchitect.split_dataset`` function
 - ``jobarchitect.path_from_hash`` function
 
