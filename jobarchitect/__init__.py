@@ -51,3 +51,17 @@ def split_dataset(dataset_path, nchunks):
             chunk.append(file_list[index])
             index += 1
         yield chunk
+
+
+def output_path_from_hash(dataset_path, hash_str, output_root):
+    """Return the absolute path to which output data should be written for the
+    datum specified by the given hash. This function is not responsible for
+    creating the directory."""
+
+    dataset_path = os.path.abspath(dataset_path)
+    dataset = DataSet.from_path(dataset_path)
+
+    for item in dataset.manifest["file_list"]:
+        if item["hash"] == hash_str:
+            return os.path.join(output_root, item["path"])
+    raise(KeyError("File hash not in dataset"))

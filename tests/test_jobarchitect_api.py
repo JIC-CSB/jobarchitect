@@ -123,3 +123,19 @@ def test_split_dataset():
     assert next(tmp_iter) == [file_list[0], file_list[1], file_list[2],
                               file_list[3], file_list[4], file_list[5],
                               file_list[6]]
+
+
+def test_output_path_from_hash():
+    from jobarchitect import output_path_from_hash
+
+    actual_path = output_path_from_hash(
+        dataset_path=TEST_SAMPLE_DATASET,
+        hash_str='c827a1a1a61e734828f525ae7715d9c5be591496',
+        output_root='/output')
+
+    expected_path = os.path.join('/output', 'real_text_file.txt')
+
+    assert actual_path == expected_path
+
+    with pytest.raises(KeyError):
+        output_path_from_hash(TEST_SAMPLE_DATASET, 'nonsense', '/output')
