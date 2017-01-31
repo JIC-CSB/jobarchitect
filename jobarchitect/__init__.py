@@ -1,10 +1,24 @@
 """jobarchitect package."""
 
 import os
+import errno
 
 from dtool import DataSet
 
 __version__ = "0.1.0"
+
+
+def mkdir_parents(path):
+    """mkdir the given directory path, including all necessary parent
+    directories. Do not raise error if directory already exists."""
+
+    try:
+        os.makedirs(path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST:
+            pass
+        else:
+            raise
 
 
 def path_from_hash(dataset_path, hash_str):
