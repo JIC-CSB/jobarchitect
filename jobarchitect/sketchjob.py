@@ -4,6 +4,7 @@ import argparse
 import collections
 
 from jobarchitect.utils import split_dataset
+from jobarchitect.backends import generate_bash_job
 
 _JobSpec = collections.namedtuple(
     '_JobSpec',
@@ -46,8 +47,18 @@ class JobSketcher(object):
             yield backend(jobspec)
 
 
-def sketchjob():
-    """Return list of job THINGS."""
+def sketchjob(template_path, dataset_path, output_root, nchunks, backend=generate_bash_job):
+    """Return list of jobs as strings."""
+    with open(template_path, "r") as fh:
+        program_template = fh.read().strip()
+    program_template = '"{}"'.format(program_template)
+    jobsketcher = JobSketcher(
+        program_template=program_template,
+        dataset_path=dataset_path,
+        output_root=output_root)
+    for job in jobsketcher.sketch(backend, nchunks):
+        yield job
+
 
 
 def cli():

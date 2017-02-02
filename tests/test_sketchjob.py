@@ -1,12 +1,11 @@
 """Test jobarchitect CLI (sketchjob)"""
 
+import sys
+import os
 import subprocess
 
 from . import TEST_SAMPLE_DATASET
-
-
-def test_sketchjob():
-    from jobarchitect.sketchjob import sketchjob
+from . import tmp_dir_fixture
 
 
 def test_generate_jobspecs():
@@ -90,6 +89,46 @@ def test_jobsketcher_sketch():
                       for jobspec in jobspec_generator]
 
     assert bash_lines == expected_lines
+
+
+# This is a functional test.
+def test_sketchjob(tmp_dir_fixture):
+    from jobarchitect.sketchjob import sketchjob
+
+    program_template_path = os.path.join(tmp_dir_fixture, "job.tmpl")
+
+    program_name = "sha1sum"
+    if sys.platform == "darwin":
+        program_name = "shasum"
+    program_template = program_name + " {input_file} > {output_file}\n"
+
+    with open(program_template_path, "w") as fh:
+        fh.write(program_template)
+
+    bash_lines = sketchjob(
+        template_path=program_template_path,
+        dataset_path=TEST_SAMPLE_DATASET,
+        output_root=tmp_dir_fixture,
+        nchunks=1)
+
+    for line in bash_lines:
+        p = subprocess.Popen(['bash'], stdin=subprocess.PIPE)
+        out, err = p.communicate(line)
+
+    from dtool import DataSet
+    from jobarchitect.utils import output_path_from_hash
+    dataset = DataSet.from_path(TEST_SAMPLE_DATASET)
+    for entry in dataset.manifest["file_list"]:
+        output_path = output_path_from_hash(
+            TEST_SAMPLE_DATASET,
+            entry["hash"],
+            tmp_dir_fixture)
+        assert os.path.isfile(output_path)
+        with open(output_path, "r") as fh:
+            contents = fh.read()
+        hash_from_output = contents.strip().split()[0]
+        assert hash_from_output == entry["hash"]
+
 
 
 def test_sketchjob_cli():
