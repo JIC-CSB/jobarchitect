@@ -8,6 +8,37 @@ def test_sketchjob():
     from jobarchitect.sketchjob import sketchjob
 
 
+def test_generate_jobspecs():
+    from jobarchitect.sketchjob import generate_jobspecs, _JobSpec
+    jobspecs = list(generate_jobspecs(
+        program_template="program",
+        dataset_path=TEST_SAMPLE_DATASET,
+        output_root="/tmp",
+        nchunks=1))
+    assert len(jobspecs) == 1
+    assert isinstance(jobspecs[0], _JobSpec)
+    assert jobspecs[0].program_template == "program"
+    assert jobspecs[0].dataset_path == TEST_SAMPLE_DATASET
+    assert jobspecs[0].output_root == "/tmp"
+    assert len(jobspecs[0].hash_ids) == 7
+
+    jobspecs = list(generate_jobspecs(
+        program_template="program",
+        dataset_path=TEST_SAMPLE_DATASET,
+        output_root="/tmp",
+        nchunks=2))
+    assert len(jobspecs) == 2
+
+    jobspecs = list(generate_jobspecs(
+        program_template="program",
+        dataset_path=TEST_SAMPLE_DATASET,
+        output_root="/tmp",
+        nchunks=7))
+    assert len(jobspecs) == 7
+    assert len(jobspecs[0].hash_ids) == 1
+    assert jobspecs[0].hash_ids[0] == "290d3f1a902c452ce1c184ed793b1d6b83b59164"
+
+
 def test_jobsketcher_initialisation():
     from jobarchitect.sketchjob import JobSketcher
 

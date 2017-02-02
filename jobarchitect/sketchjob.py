@@ -15,6 +15,17 @@ _JobSpec = collections.namedtuple(
 )
 
 
+def generate_jobspecs(program_template, dataset_path, output_root, nchunks):
+    for file_entry_list in split_dataset(dataset_path, nchunks):
+        identifiers = [entry['hash'] for entry in file_entry_list]
+        yield _JobSpec(
+            program_template,
+            dataset_path,
+            output_root,
+            identifiers
+        )
+
+
 class JobSketcher(object):
     """Class to build up jobs to analyse a dataset."""
 
