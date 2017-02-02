@@ -20,9 +20,6 @@ def test_agent_initialisation():
 
     assert agent.output_root == "/tmp"
 
-    from dtool import DataSet
-    assert isinstance(agent.dataset, DataSet)
-
 
 def test_create_command():
     from jobarchitect.agent import Agent
