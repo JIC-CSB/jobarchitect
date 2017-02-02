@@ -3,6 +3,8 @@
 import argparse
 import collections
 
+from jobarchitect.utils import split_dataset
+
 _JobSpec = collections.namedtuple(
     '_JobSpec',
     ['program_template',
@@ -20,6 +22,16 @@ class JobSketcher(object):
         self.program_template = program_template
         self.dataset_path = dataset_path
         self.output_root = output_root
+
+    def _generate_jobspecs(self, nchunks):
+        for file_entry_list in split_dataset(self.dataset_path, nchunks):
+            identifiers = [entry['hash'] for entry in file_entry_list]
+            yield _JobSpec(
+                self.program_template,
+                self.dataset_path,
+                self.output_root,
+                identifiers
+            )
 
 
 def sketchjob():

@@ -22,6 +22,20 @@ def test_jobsketcher_initialisation():
     assert jobsketcher.output_root == '/tmp/output'
 
 
+def test_jobsketcher_generate_jobspecs():
+    from jobarchitect.sketchjob import JobSketcher
+
+    jobsketcher = JobSketcher(
+        program_template='shasum {input_file} > {output_file}',
+        dataset_path=TEST_SAMPLE_DATASET,
+        output_root='/tmp/output')
+
+    jobspecs = list(jobsketcher._generate_jobspecs(nchunks=1))
+    assert len(jobspecs) == 1
+    from jobarchitect.sketchjob import _JobSpec
+    assert isinstance(jobspecs[0], _JobSpec)
+
+
 def test_jobsketcher_sketch():
     from jobarchitect.sketchjob import JobSketcher
     from jobarchitect.backends import generate_bash_job
@@ -31,7 +45,7 @@ def test_jobsketcher_sketch():
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output')
 
-    bash_lines = jobsketcher.sketch(backend=generate_bash_job, nchunks=1)
+    # bash_lines = jobsketcher.sketch(backend=generate_bash_job, nchunks=1)
 
 
 def test_sketchjob_cli():
