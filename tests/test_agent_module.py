@@ -77,7 +77,7 @@ def test_run_analysis(tmp_dir_fixture):  # NOQA
     assert hash_from_output == 'c827a1a1a61e734828f525ae7715d9c5be591496'
 
 
-def test_analyse_by_identifiers(tmp_dir_fixture):
+def test_analyse_by_identifiers(tmp_dir_fixture):  # NOQA
     from jobarchitect.agent import analyse_by_identifiers
 
     from jobarchitect import output_path_from_hash
@@ -105,7 +105,7 @@ def test_analyse_by_identifiers(tmp_dir_fixture):
     assert hash_from_output == 'c827a1a1a61e734828f525ae7715d9c5be591496'
 
 
-def test_analyse_by_identifiers_with_multiple_identifiers(tmp_dir_fixture):
+def test_analyse_by_identifiers_with_multiple_identifiers(tmp_dir_fixture):  # NOQA
     from jobarchitect.agent import analyse_by_identifiers
 
     from jobarchitect import output_path_from_hash
@@ -137,7 +137,7 @@ def test_analyse_by_identifiers_with_multiple_identifiers(tmp_dir_fixture):
         assert hash_from_output == identifiers[i]
 
 
-def test_command_line_invocation(tmp_dir_fixture):
+def test_command_line_invocation(tmp_dir_fixture):  # NOQA
     program_name = "sha1sum"
     if sys.platform == "darwin":
         program_name = "shasum"

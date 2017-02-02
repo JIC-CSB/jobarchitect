@@ -3,8 +3,6 @@
 import argparse
 import subprocess
 
-from dtool import DataSet
-
 from jobarchitect import path_from_hash, output_path_from_hash
 
 
