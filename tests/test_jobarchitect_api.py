@@ -2,23 +2,10 @@
 
 import os
 import json
-import shutil
-import tempfile
 
 import pytest
 
-HERE = os.path.dirname(__file__)
-TEST_SAMPLE_DATASET = os.path.join(HERE, "data", "sample_data")
-
-
-@pytest.fixture
-def tmp_dir_fixture(request):
-    d = tempfile.mkdtemp()
-
-    @request.addfinalizer
-    def teardown():
-        shutil.rmtree(d)
-    return d
+from . import TEST_SAMPLE_DATASET
 
 
 def test_version_is_string():
@@ -176,6 +163,7 @@ _analyse_by_id \
         'c827a1a1a61e734828f525ae7715d9c5be591496')
 
     actual_output = generate_bash_job(input_job)
+    assert expected_output == actual_output
 
 
 def test_generate_bash_job_multi_line():
@@ -213,3 +201,4 @@ _analyse_by_id \
         '1 2')
 
     actual_output = generate_bash_job(input_job)
+    assert expected_output == actual_output
