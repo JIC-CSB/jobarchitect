@@ -14,26 +14,6 @@ def test_version_is_string():
     assert isinstance(jobarchitect.__version__, str)
 
 
-def test_mkdir_parents(tmp_dir_fixture):  # NOQA
-    from jobarchitect import mkdir_parents
-
-    partial_path_a = os.path.join(tmp_dir_fixture, 'a')
-    assert not os.path.isdir(partial_path_a)
-    partial_path_b = os.path.join(partial_path_a, 'b')
-    assert not os.path.isdir(partial_path_b)
-    dir_path_with_parents = os.path.join(tmp_dir_fixture, 'a', 'b', 'c')
-    assert not os.path.isdir(dir_path_with_parents)
-
-    mkdir_parents(dir_path_with_parents)
-
-    assert os.path.isdir(partial_path_a)
-    assert os.path.isdir(partial_path_b)
-    assert os.path.isdir(dir_path_with_parents)
-
-    # This should not raise error about already existing
-    mkdir_parents(dir_path_with_parents)
-
-
 def test_path_from_hash():
     from jobarchitect import path_from_hash
 
@@ -135,7 +115,7 @@ def test_generate_bash_job_single_line():
 
     JobSpec = namedtuple(
         'JobSpec',
-        ['program_name',
+        ['program_template',
          'dataset_path',
          'output_root',
          'hash_ids'
@@ -143,15 +123,15 @@ def test_generate_bash_job_single_line():
     )
 
     parameters = dict(
-        program_name='shasum',
+        program_template='shasum',
         dataset_path='/data',
         output_root='/output',
         hash_ids='c827a1a1a61e734828f525ae7715d9c5be591496',
 
     )
     expected_output = """#!/bin/bash
-_analyse_by_id \
-  --program_name={program_name} \
+_analyse_by_ids \
+  --program_template={program_template} \
   --input_dataset_path={dataset_path} \
   --output_root={output_root} \
   {hash_ids}
@@ -173,7 +153,7 @@ def test_generate_bash_job_multi_line():
 
     JobSpec = namedtuple(
         'JobSpec',
-        ['program_name',
+        ['program_template',
          'dataset_path',
          'output_root',
          'hash_ids'
@@ -181,15 +161,15 @@ def test_generate_bash_job_multi_line():
     )
 
     parameters = dict(
-        program_name='shasum',
+        program_template='shasum',
         dataset_path='/data',
         output_root='/output',
         hash_ids='1 2',
 
     )
     expected_output = """#!/bin/bash
-_analyse_by_id \
-  --program_name={program_name} \
+_analyse_by_ids \
+  --program_template={program_template} \
   --input_dataset_path={dataset_path} \
   --output_root={output_root} \
   {hash_ids}
