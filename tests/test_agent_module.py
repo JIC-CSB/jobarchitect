@@ -32,6 +32,11 @@ def test_create_command():
 def test_agent_initialisation():
     from jobarchitect.agent import Agent
 
-    Agent(
-        path_to_dataset='/path/to/dataset',
-        program_string='shasum')
+    program_template = "shasum {input_file} > {output_file}"
+    agent = Agent(dataset_path='/path/to/dataset',
+                  program_template=program_template)
+
+    expected_string = "shasum /input/test.txt > /output/test.txt"
+    dummy_dict = {"input_file": "/input/test.txt",
+                  "output_file": "/output/test.txt"}
+    assert agent.program_template.format(**dummy_dict) == expected_string

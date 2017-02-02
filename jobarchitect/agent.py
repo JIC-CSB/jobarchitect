@@ -4,6 +4,10 @@
 class Agent(object):
     """Class to create commands to analyse data."""
 
+    def __init__(self, dataset_path, program_template):
+        self.dataset_path = dataset_path
+        self.program_template = program_template
+
 
 def create_command(program_name, input_file, output_file):
     """Return list representing command to execute.
