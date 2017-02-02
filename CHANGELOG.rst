@@ -11,6 +11,9 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
+- ``_analyse_by_ids`` CLI
+- ``jobarchitect.agent.analyse_by_identifiers`` function
+- ``jobarchitect.agent.Agent`` class
 - ``jobarchitect.mkdir_parents`` function
 - ``jobarchitect.output_path_from_hash`` function
 - ``jobarchitect.split_dataset`` function
