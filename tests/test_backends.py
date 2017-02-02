@@ -1,16 +1,7 @@
 
 def test_generate_bash_job_single_line():
     from jobarchitect.backends import generate_bash_job
-    from collections import namedtuple
-
-    JobSpec = namedtuple(
-        'JobSpec',
-        ['program_template',
-         'dataset_path',
-         'output_root',
-         'hash_ids'
-         ]
-    )
+    from jobarchitect.sketchjob import _JobSpec
 
     parameters = dict(
         program_template='shasum',
@@ -27,7 +18,7 @@ _analyse_by_ids \
   {hash_ids}
     """.format(**parameters)
 
-    input_job = JobSpec(
+    input_job = _JobSpec(
         'shasum',
         '/data',
         '/output',
@@ -39,16 +30,7 @@ _analyse_by_ids \
 
 def test_generate_bash_job_multi_line():
     from jobarchitect.backends import generate_bash_job
-    from collections import namedtuple
-
-    JobSpec = namedtuple(
-        'JobSpec',
-        ['program_template',
-         'dataset_path',
-         'output_root',
-         'hash_ids'
-         ]
-    )
+    from jobarchitect.sketchjob import _JobSpec
 
     parameters = dict(
         program_template='shasum',
@@ -65,7 +47,7 @@ _analyse_by_ids \
   {hash_ids}
     """.format(**parameters)
 
-    input_job = JobSpec(
+    input_job = _JobSpec(
         'shasum',
         '/data',
         '/output',
