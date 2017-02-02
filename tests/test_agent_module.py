@@ -1,12 +1,6 @@
 """Tests for agent module."""
 
-import sys
-
 from . import TEST_SAMPLE_DATASET
-
-
-def test_import_agent():
-    from jobarchitect.agent import Agent
 
 
 def test_agent_initialisation():

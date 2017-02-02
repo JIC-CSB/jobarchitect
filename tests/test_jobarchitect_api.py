@@ -5,7 +5,8 @@ import json
 
 import pytest
 
-from . import TEST_SAMPLE_DATASET, tmp_dir_fixture
+from . import TEST_SAMPLE_DATASET
+from . import tmp_dir_fixture  # NOQA
 
 
 def test_version_is_string():
@@ -13,7 +14,7 @@ def test_version_is_string():
     assert isinstance(jobarchitect.__version__, str)
 
 
-def test_mkdir_parents(tmp_dir_fixture):
+def test_mkdir_parents(tmp_dir_fixture):  # NOQA
     from jobarchitect import mkdir_parents
 
     partial_path_a = os.path.join(tmp_dir_fixture, 'a')

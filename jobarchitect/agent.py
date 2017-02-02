@@ -14,7 +14,6 @@ class Agent(object):
 
         self.dataset = DataSet.from_path(self.dataset_path)
 
-
     def create_command(self, hash_str):
         input_file = path_from_hash(self.dataset_path, hash_str)
         output_file = output_path_from_hash(
