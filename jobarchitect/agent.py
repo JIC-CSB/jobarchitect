@@ -1,5 +1,6 @@
 """Jobarchitect agent."""
 
+import argparse
 import subprocess
 
 from dtool import DataSet
@@ -29,8 +30,28 @@ class Agent(object):
         subprocess.call(command, shell=True)
 
 
-def analyse_by_identifier(program_template, dataset_path, output_root, identifiers):
+def analyse_by_identifiers(
+        program_template, dataset_path, output_root, identifiers):
     """Run analysis on identifiers."""
     agent = Agent(program_template, dataset_path, output_root)
     for i in identifiers:
         agent.run_analysis(i)
+
+
+def cli():
+    """Command line interface for _analyse_by_ids"""
+
+    parser = argparse.ArgumentParser(description=__doc__)
+
+    parser.add_argument('--program_template', required=True)
+    parser.add_argument('--input_dataset_path', required=True)
+    parser.add_argument('--output_root', required=True)
+    parser.add_argument('identifiers', nargs=argparse.REMAINDER)
+
+    args = parser.parse_args()
+
+    analyse_by_identifiers(
+        args.program_template,
+        args.input_dataset_path,
+        args.output_root,
+        args.identifiers)
