@@ -42,6 +42,10 @@ class JobSketcher(object):
             nchunks):
             yield jobspec
 
+    def sketch(self, backend, nchunks):
+        for jobspec in self._generate_jobspecs(nchunks):
+            yield backend(jobspec)
+
 
 def sketchjob():
     """Return list of job THINGS."""

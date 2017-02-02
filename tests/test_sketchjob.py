@@ -68,7 +68,7 @@ def test_jobsketcher_generate_jobspecs():
 
 
 def test_jobsketcher_sketch():
-    from jobarchitect.sketchjob import JobSketcher
+    from jobarchitect.sketchjob import JobSketcher, generate_jobspecs
     from jobarchitect.backends import generate_bash_job
 
     jobsketcher = JobSketcher(
@@ -76,7 +76,18 @@ def test_jobsketcher_sketch():
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output')
 
-    # bash_lines = jobsketcher.sketch(backend=generate_bash_job, nchunks=1)
+    bash_lines = list(jobsketcher.sketch(backend=generate_bash_job, nchunks=1))
+
+    jobspec_generator = generate_jobspecs(
+        program_template='shasum {input_file} > {output_file}',
+        dataset_path=TEST_SAMPLE_DATASET,
+        output_root='/tmp/output',
+        nchunks=1)
+
+    expected_lines = [generate_bash_job(jobspec)
+                      for jobspec in jobspec_generator]
+
+    assert bash_lines == expected_lines
 
 
 def test_sketchjob_cli():
