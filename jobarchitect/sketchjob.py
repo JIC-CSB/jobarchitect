@@ -35,14 +35,12 @@ class JobSketcher(object):
         self.output_root = output_root
 
     def _generate_jobspecs(self, nchunks):
-        for file_entry_list in split_dataset(self.dataset_path, nchunks):
-            identifiers = [entry['hash'] for entry in file_entry_list]
-            yield _JobSpec(
-                self.program_template,
-                self.dataset_path,
-                self.output_root,
-                identifiers
-            )
+        for jobspec in generate_jobspecs(
+            self.program_template,
+            self.dataset_path,
+            self.output_root,
+            nchunks):
+            yield jobspec
 
 
 def sketchjob():
