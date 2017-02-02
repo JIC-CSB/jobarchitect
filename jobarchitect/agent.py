@@ -2,6 +2,8 @@
 
 from dtool import DataSet
 
+from jobarchitect import path_from_hash, output_path_from_hash
+
 
 class Agent(object):
     """Class to create commands to analyse data."""
@@ -13,9 +15,10 @@ class Agent(object):
         self.dataset = DataSet.from_path(self.dataset_path)
 
 
-def create_command(program_name, input_file, output_file):
-    """Return list representing command to execute.
-
-    This is a placeholder for a function that does this properly."""
-
-    return [program_name, input_file, output_file]
+    def create_command(self, hash_str):
+        input_file = path_from_hash(self.dataset_path, hash_str)
+        output_file = output_path_from_hash(
+            self.dataset_path, hash_str, "/tmp/output")
+        return self.program_template.format(
+            input_file=input_file,
+            output_file=output_file)
