@@ -1,5 +1,7 @@
 """Jobarchitect agent."""
 
+import subprocess
+
 from dtool import DataSet
 
 from jobarchitect import path_from_hash, output_path_from_hash
@@ -16,7 +18,12 @@ class Agent(object):
     def create_command(self, hash_str):
         input_file = path_from_hash(self.dataset_path, hash_str)
         output_file = output_path_from_hash(
-            self.dataset_path, hash_str, "/tmp/output")
+            self.dataset_path, hash_str, self.output_root)
         return self.program_template.format(
             input_file=input_file,
             output_file=output_file)
+
+    def run_analysis(self, hash_str):
+        """Run the analysis on an item in the dataset."""
+        command = self.create_command(hash_str)
+        subprocess.call(command, shell=True)

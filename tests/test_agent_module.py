@@ -1,6 +1,7 @@
 """Tests for agent module."""
 
 import sys
+import os
 
 from . import TEST_SAMPLE_DATASET
 from . import tmp_dir_fixture  # NOQA
@@ -57,3 +58,20 @@ def test_run_analysis(tmp_dir_fixture):  # NOQA
     agent = Agent(dataset_path=TEST_SAMPLE_DATASET,
                   program_template=program_template,
                   output_root=tmp_dir_fixture)
+
+    from jobarchitect import output_path_from_hash
+    expected_output_path = output_path_from_hash(
+        TEST_SAMPLE_DATASET,
+        'c827a1a1a61e734828f525ae7715d9c5be591496',
+        tmp_dir_fixture)
+
+    assert not os.path.isfile(expected_output_path)
+
+    agent.run_analysis('c827a1a1a61e734828f525ae7715d9c5be591496')
+
+    assert os.path.isfile(expected_output_path)
+
+    with open(expected_output_path, "r") as fh:
+        contents = fh.read()
+    hash_from_output = contents.strip().split()[0]
+    assert hash_from_output == 'c827a1a1a61e734828f525ae7715d9c5be591496'
