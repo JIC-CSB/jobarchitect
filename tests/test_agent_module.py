@@ -70,7 +70,34 @@ def test_run_analysis(tmp_dir_fixture):  # NOQA
     agent.run_analysis('c827a1a1a61e734828f525ae7715d9c5be591496')
 
     assert os.path.isfile(expected_output_path)
+    with open(expected_output_path, "r") as fh:
+        contents = fh.read()
+    hash_from_output = contents.strip().split()[0]
+    assert hash_from_output == 'c827a1a1a61e734828f525ae7715d9c5be591496'
 
+
+def test_analyse_by_identifier(tmp_dir_fixture):
+    from jobarchitect.agent import analyse_by_identifier
+
+    from jobarchitect import output_path_from_hash
+    expected_output_path = output_path_from_hash(
+        TEST_SAMPLE_DATASET,
+        'c827a1a1a61e734828f525ae7715d9c5be591496',
+        tmp_dir_fixture)
+    assert not os.path.isfile(expected_output_path)
+
+    program_name = "sha1sum"
+    if sys.platform == "darwin":
+        program_name = "shasum"
+    program_template = program_name + " {input_file} > {output_file}"
+
+    analyse_by_identifier(
+        program_template=program_template,
+        dataset_path=TEST_SAMPLE_DATASET,
+        output_root=tmp_dir_fixture,
+        identifiers=['c827a1a1a61e734828f525ae7715d9c5be591496'])
+
+    assert os.path.isfile(expected_output_path)
     with open(expected_output_path, "r") as fh:
         contents = fh.read()
     hash_from_output = contents.strip().split()[0]
