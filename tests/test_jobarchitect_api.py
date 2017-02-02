@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from . import TEST_SAMPLE_DATASET
+from . import TEST_SAMPLE_DATASET, tmp_dir_fixture
 
 
 def test_version_is_string():

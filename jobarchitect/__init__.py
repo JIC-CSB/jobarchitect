@@ -86,3 +86,5 @@ _analyse_by_id \
   --output_root={output_root} \
   {hash_ids}
     """.format(**jobspec._asdict())
+
+    return output
