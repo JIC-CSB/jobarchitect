@@ -1,5 +1,7 @@
 """Jobarchitect agent."""
 
+from dtool import DataSet
+
 
 class Agent(object):
     """Class to create commands to analyse data."""
@@ -7,6 +9,8 @@ class Agent(object):
     def __init__(self, dataset_path, program_template):
         self.dataset_path = dataset_path
         self.program_template = program_template
+
+        self.dataset = DataSet.from_path(self.dataset_path)
 
 
 def create_command(program_name, input_file, output_file):
