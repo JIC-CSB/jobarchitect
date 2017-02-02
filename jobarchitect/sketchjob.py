@@ -35,11 +35,10 @@ class JobSketcher(object):
         self.output_root = output_root
 
     def _generate_jobspecs(self, nchunks):
-        for jobspec in generate_jobspecs(
-            self.program_template,
-            self.dataset_path,
-            self.output_root,
-            nchunks):
+        for jobspec in generate_jobspecs(self.program_template,
+                                         self.dataset_path,
+                                         self.output_root,
+                                         nchunks):
             yield jobspec
 
     def sketch(self, backend, nchunks):

@@ -4,6 +4,7 @@ import subprocess
 
 from . import TEST_SAMPLE_DATASET
 
+
 def test_sketchjob():
     from jobarchitect.sketchjob import sketchjob
 
@@ -36,7 +37,8 @@ def test_generate_jobspecs():
         nchunks=7))
     assert len(jobspecs) == 7
     assert len(jobspecs[0].hash_ids) == 1
-    assert jobspecs[0].hash_ids[0] == "290d3f1a902c452ce1c184ed793b1d6b83b59164"
+    assert jobspecs[0].hash_ids[0] ==  \
+        "290d3f1a902c452ce1c184ed793b1d6b83b59164"
 
 
 def test_jobsketcher_initialisation():
