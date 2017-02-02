@@ -5,7 +5,7 @@ import os
 import subprocess
 
 from . import TEST_SAMPLE_DATASET
-from . import tmp_dir_fixture
+from . import tmp_dir_fixture  # NOQA
 
 
 def test_generate_jobspecs():
@@ -92,7 +92,7 @@ def test_jobsketcher_sketch():
 
 
 # This is a functional test.
-def test_sketchjob(tmp_dir_fixture):
+def test_sketchjob(tmp_dir_fixture):  # NOQA
     from jobarchitect.sketchjob import sketchjob
 
     program_template_path = os.path.join(tmp_dir_fixture, "job.tmpl")
@@ -128,7 +128,6 @@ def test_sketchjob(tmp_dir_fixture):
             contents = fh.read()
         hash_from_output = contents.strip().split()[0]
         assert hash_from_output == entry["hash"]
-
 
 
 def test_sketchjob_cli():

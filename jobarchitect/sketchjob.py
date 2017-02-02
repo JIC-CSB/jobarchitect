@@ -47,7 +47,8 @@ class JobSketcher(object):
             yield backend(jobspec)
 
 
-def sketchjob(template_path, dataset_path, output_root, nchunks, backend=generate_bash_job):
+def sketchjob(template_path, dataset_path, output_root,
+              nchunks, backend=generate_bash_job):
     """Return list of jobs as strings."""
     with open(template_path, "r") as fh:
         program_template = fh.read().strip()
@@ -58,7 +59,6 @@ def sketchjob(template_path, dataset_path, output_root, nchunks, backend=generat
         output_root=output_root)
     for job in jobsketcher.sketch(backend, nchunks):
         yield job
-
 
 
 def cli():
