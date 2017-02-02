@@ -3,7 +3,7 @@
 import argparse
 import subprocess
 
-from jobarchitect import path_from_hash, output_path_from_hash
+from jobarchitect.utils import path_from_hash, output_path_from_hash
 
 
 class Agent(object):

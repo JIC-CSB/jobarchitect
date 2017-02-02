@@ -31,7 +31,7 @@ def test_create_command():
                   program_template=program_template,
                   output_root="/tmp/output")
 
-    from jobarchitect import path_from_hash, output_path_from_hash
+    from jobarchitect.utils import path_from_hash, output_path_from_hash
     expected_input_path = path_from_hash(
         TEST_SAMPLE_DATASET,
         'c827a1a1a61e734828f525ae7715d9c5be591496')
@@ -60,7 +60,7 @@ def test_run_analysis(tmp_dir_fixture):  # NOQA
                   program_template=program_template,
                   output_root=tmp_dir_fixture)
 
-    from jobarchitect import output_path_from_hash
+    from jobarchitect.utils import output_path_from_hash
     expected_output_path = output_path_from_hash(
         TEST_SAMPLE_DATASET,
         'c827a1a1a61e734828f525ae7715d9c5be591496',
@@ -80,7 +80,7 @@ def test_run_analysis(tmp_dir_fixture):  # NOQA
 def test_analyse_by_identifiers(tmp_dir_fixture):  # NOQA
     from jobarchitect.agent import analyse_by_identifiers
 
-    from jobarchitect import output_path_from_hash
+    from jobarchitect.utils import output_path_from_hash
     expected_output_path = output_path_from_hash(
         TEST_SAMPLE_DATASET,
         'c827a1a1a61e734828f525ae7715d9c5be591496',
@@ -108,7 +108,7 @@ def test_analyse_by_identifiers(tmp_dir_fixture):  # NOQA
 def test_analyse_by_identifiers_with_multiple_identifiers(tmp_dir_fixture):  # NOQA
     from jobarchitect.agent import analyse_by_identifiers
 
-    from jobarchitect import output_path_from_hash
+    from jobarchitect.utils import output_path_from_hash
 
     identifiers = ['c827a1a1a61e734828f525ae7715d9c5be591496',
                    '290d3f1a902c452ce1c184ed793b1d6b83b59164']
@@ -155,7 +155,7 @@ def test_command_line_invocation(tmp_dir_fixture):  # NOQA
 
     cmd.extend(identifiers)
 
-    from jobarchitect import output_path_from_hash
+    from jobarchitect.utils import output_path_from_hash
 
     expected_output_paths = [output_path_from_hash(
         TEST_SAMPLE_DATASET, h, tmp_dir_fixture)
