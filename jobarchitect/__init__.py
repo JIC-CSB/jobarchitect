@@ -13,12 +13,15 @@ class JobSpec(object):
         self._spec["program_template"] = program_template
         self._spec["dataset_path"] = dataset_path
         self._spec["output_root"] = output_root
-        self._spec["hash_ids"] = hash_ids
+        self._spec["hash_ids"] = " ".join([str(i) for i in hash_ids])
         if docker_image_name is not None:
             self._spec["docker_image_name"] = docker_image_name
 
     def __getitem__(self, key):
         return self._spec[key]
+
+    def keys(self):
+        return self._spec.keys()
 
     @property
     def program_template(self):
