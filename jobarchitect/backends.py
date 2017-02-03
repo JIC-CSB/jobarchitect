@@ -2,15 +2,13 @@
 
 
 def generate_bash_job(jobspec):
-    """Return bash script to run all analysis on all data in one chunk from a
-    split dataset.
+    """Return bash job script job as a string.
 
-    jobspec should include:
+    The script contains code to run all analysis on all data in one chunk from
+    a split dataset.
 
-    dataset_path: Path to dataset
-    output_root: Root of path in which output will be written
-    program_template: Template to specify analysis program to execute
-    chunks: List of hashes to analyse
+    :param jobspec: job specification as a :class:`jobarchitect.JobSpec`
+    :returns: bash job script as a string
     """
 
     output = """#!/bin/bash
@@ -25,8 +23,13 @@ _analyse_by_ids \
 
 
 def generate_docker_job(jobspec):
-    """Return a command (as string) to run a docker container to
-    analyse data."""
+    """Return docker job script as a string.
+
+    The script contains code to run a docker container to analyse data.
+
+    :param jobspec: job specification as a :class:`jobarchitect.JobSpec`
+    :returns: docker job script as a string
+    """
 
     output = """#!/bin/bash
 IMAGE_NAME={image_name}

@@ -25,22 +25,27 @@ class JobSpec(object):
 
     @property
     def program_template(self):
+        """Return the program template string."""
         return self._spec["program_template"]
 
     @property
     def dataset_path(self):
+        """Return the dataset path."""
         return self._spec["dataset_path"]
 
     @property
     def output_root(self):
+        """Return the output root path."""
         return self._spec["output_root"]
 
     @property
     def hash_ids(self):
+        """Return the hash identifiers as a string."""
         return self._spec["hash_ids"]
 
     @property
     def image_name(self):
+        """Return the container image name."""
         if "image_name" not in self._spec:
-            raise(AttributeError("Docker image name not specified"))
+            raise(AttributeError("Image name not specified"))
         return self._spec["image_name"]

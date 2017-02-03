@@ -18,6 +18,15 @@ def generate_jobspecs(
         nchunks,
         image_name=None
         ):
+    """Return generator yielding instances of :class:`jobarchitect.JobSec`.
+
+    :param program_template: program template string
+    :param dataset_path: path to input dataset
+    :param output_root: path to output root
+    :param nchunks: number of chunks the job should be split into
+    :param image_name: container image name
+    :returns: generator yielding instances of :class:`jobarchitect.JobSec`
+    """
     for file_entry_list in split_dataset(dataset_path, nchunks):
         identifiers = [entry['hash'] for entry in file_entry_list]
         yield JobSpec(
@@ -53,13 +62,27 @@ class JobSketcher(object):
             yield jobspec
 
     def sketch(self, backend, nchunks):
+        """Return generator yielding instances of :class:`jobarchitect.JobSec`.
+
+        :param backend: backend function for generating job scripts
+        :param nchunks: number of chunks the job should be split into
+        :returns: generator yielding jobs as strings
+        """
         for jobspec in self._generate_jobspecs(nchunks):
             yield backend(jobspec)
 
 
 def sketchjob(template_path, dataset_path, output_root,
-              nchunks, backend, image_name=None):
-    """Return list of jobs as strings."""
+              backend, nchunks, image_name=None):
+    """Return list of jobs as strings.
+
+    :param template_path: path to program template file
+    :param dataset_path: path to input dataset
+    :param output_root: path to output root
+    :param backend: backend function for generating job scripts
+    :param nchunks: number of chunks the job should be split into
+    :returns: generator yielding jobs as strings
+    """
     with open(template_path, "r") as fh:
         program_template = fh.read().strip()
     program_template = '"{}"'.format(program_template)
@@ -113,7 +136,7 @@ backend ({})""".format(args.backend))
     for job in sketchjob(args.job_description_file,
                          args.dataset_path,
                          args.output_path,
-                         args.nchunks,
                          backend_function_map[args.backend],
+                         args.nchunks,
                          args.image_name):
         print(job)

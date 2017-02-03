@@ -7,8 +7,13 @@ from dtool import DataSet
 
 
 def mkdir_parents(path):
-    """mkdir the given directory path, including all necessary parent
-    directories. Do not raise error if directory already exists."""
+    """Create the given directory path.
+
+    This includes all necessary parent directories. Does not raise an error if
+    the directory already exists.
+
+    :param path: path to create
+    """
 
     try:
         os.makedirs(path)
@@ -20,7 +25,12 @@ def mkdir_parents(path):
 
 
 def path_from_hash(dataset_path, hash_str):
-    """Return absolute path from a dataset given a hash."""
+    """Return absolute path from a dataset given a hash.
+
+    :param dataset_path: path to input dataset
+    :param hash_str: dataset item identifier as a hash string
+    :returns: absolute path to dataset item
+    """
     dataset_path = os.path.abspath(dataset_path)
     dataset = DataSet.from_path(dataset_path)
     data_path = os.path.join(dataset_path, dataset.data_directory)
@@ -31,7 +41,12 @@ def path_from_hash(dataset_path, hash_str):
 
 
 def split_dataset(dataset_path, nchunks):
-    """Return list of list of file entries."""
+    """Return generator yielding lists of file entries.
+
+    :param dataset_path: path to input dataset
+    :param nchunks: number of chunks the dataset items should be split into
+    :returns: generator yielding lists of file entries
+    """
     dataset_path = os.path.abspath(dataset_path)
     dataset = DataSet.from_path(dataset_path)
 
@@ -52,9 +67,19 @@ def split_dataset(dataset_path, nchunks):
 
 
 def output_path_from_hash(dataset_path, hash_str, output_root):
-    """Return the absolute path to which output data should be written for the
-    datum specified by the given hash. This function is not responsible for
-    creating the directory."""
+    """Return absolute output path for a dataset item.
+
+    A.k.a. the absolute path to which output data should be written for the
+    datum specified by the given hash.
+
+    This function is not responsible for creating the directory.
+
+    :param dataset_path: path to input dataset
+    :param hash_str: dataset item identifier as a hash string
+    :param output_root: path to output root
+    :raises: KeyError if hash string identifier is not in the dataset
+    :returns: absolute output path for a dataset item specified by the identifier
+    """
 
     dataset_path = os.path.abspath(dataset_path)
     dataset = DataSet.from_path(dataset_path)
