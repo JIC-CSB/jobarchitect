@@ -8,9 +8,36 @@ class JobSpec(object):
 
     def __init__(self, program_template, dataset_path,
                  output_root, hash_ids, docker_image_name=None):
-        self.program_template = program_template
-        self.dataset_path = dataset_path
-        self.output_root = output_root
-        self.hash_ids = hash_ids
+
+        self._spec = dict()
+        self._spec["program_template"] = program_template
+        self._spec["dataset_path"] = dataset_path
+        self._spec["output_root"] = output_root
+        self._spec["hash_ids"] = hash_ids
         if docker_image_name is not None:
-            self.docker_image_name = docker_image_name
+            self._spec["docker_image_name"] = docker_image_name
+
+    def __getitem__(self, key):
+        return self._spec[key]
+
+    @property
+    def program_template(self):
+        return self._spec["program_template"]
+
+    @property
+    def dataset_path(self):
+        return self._spec["dataset_path"]
+
+    @property
+    def output_root(self):
+        return self._spec["output_root"]
+
+    @property
+    def hash_ids(self):
+        return self._spec["hash_ids"]
+
+    @property
+    def docker_image_name(self):
+        if "docker_image_name" not in self._spec:
+            raise(AttributeError("Docker image name not specified"))
+        return self._spec["docker_image_name"]
