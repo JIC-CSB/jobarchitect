@@ -154,7 +154,11 @@ def test_sketchjob_cli(tmp_dir_fixture):
     assert script_calling_analyse_by_ids.find("_analyse_by_ids") != -1
 
     # Run the script produced by sketchjob.
-    p = subprocess.Popen(["bash"], stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(
+        ["bash"],
+        stdin=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
     out, err = p.communicate(script_calling_analyse_by_ids)
     assert err == ""
 
