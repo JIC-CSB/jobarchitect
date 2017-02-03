@@ -18,3 +18,13 @@ def tmp_dir_fixture(request):
     def teardown():
         shutil.rmtree(d)
     return d
+
+
+@pytest.fixture
+def local_tmp_dir_fixture(request):
+    d = tempfile.mkdtemp(dir=_HERE)
+
+    @request.addfinalizer
+    def teardown():
+        shutil.rmtree(d)
+    return d

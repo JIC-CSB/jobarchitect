@@ -59,22 +59,23 @@ _analyse_by_ids \
 
 def test_generate_docker_job_single_line():
     from jobarchitect import JobSpec
+    from jobarchitect.backends import generate_docker_job
 
     parameters = dict(
         program_template='sha1sum',
         dataset_path='/outside/container/data',
         output_root='/outside/container/output',
         hash_ids="1 2",
-        container_name="mycontainer")
+        image_name="ubuntu")
 
     expected_output = """#!/bin/bash
-CONTAINER_NAME={container_name}
-docker run
+IMAGE_NAME={image_name}
+docker run  \
   --rm  \
   -v {dataset_path}:/input_dataset:ro  \
   -v {output_root}:/output  \
-  $CONTAINER_NAME  \
-  analyse_by_id  \
+  $IMAGE_NAME  \
+  _analyse_by_ids  \
     --program_template {program_template}  \
     --input_dataset_path=/input_dataset  \
     --output_root=/output  \
@@ -86,7 +87,7 @@ docker run
         '/outside/container/data',
         '/outside/container/output',
         [1, 2],
-        image_name='mycontainer')
+        image_name='ubuntu')
 
     actual_output = generate_docker_job(input_job)
 

@@ -6,32 +6,50 @@ import collections
 
 from jobarchitect import JobSpec
 from jobarchitect.utils import split_dataset
-from jobarchitect.backends import generate_bash_job
+from jobarchitect.backends import (
+    generate_bash_job,
+)
 
-def generate_jobspecs(program_template, dataset_path, output_root, nchunks):
+
+def generate_jobspecs(
+        program_template,
+        dataset_path,
+        output_root,
+        nchunks,
+        image_name=None
+        ):
     for file_entry_list in split_dataset(dataset_path, nchunks):
         identifiers = [entry['hash'] for entry in file_entry_list]
         yield JobSpec(
             program_template,
             dataset_path,
             output_root,
-            identifiers
+            identifiers,
+            image_name=image_name
         )
 
 
 class JobSketcher(object):
     """Class to build up jobs to analyse a dataset."""
 
-    def __init__(self, program_template, dataset_path, output_root):
+    def __init__(
+            self,
+            program_template,
+            dataset_path,
+            output_root,
+            image_name=None
+            ):
         self.program_template = program_template
         self.dataset_path = dataset_path
         self.output_root = output_root
+        self.image_name = image_name
 
     def _generate_jobspecs(self, nchunks):
         for jobspec in generate_jobspecs(self.program_template,
                                          self.dataset_path,
                                          self.output_root,
-                                         nchunks):
+                                         nchunks,
+                                         image_name=self.image_name):
             yield jobspec
 
     def sketch(self, backend, nchunks):
@@ -40,7 +58,7 @@ class JobSketcher(object):
 
 
 def sketchjob(template_path, dataset_path, output_root,
-              nchunks, backend=generate_bash_job):
+              nchunks, backend=generate_bash_job, image_name=None):
     """Return list of jobs as strings."""
     with open(template_path, "r") as fh:
         program_template = fh.read().strip()
@@ -48,7 +66,8 @@ def sketchjob(template_path, dataset_path, output_root,
     jobsketcher = JobSketcher(
         program_template=program_template,
         dataset_path=dataset_path,
-        output_root=output_root)
+        output_root=output_root,
+        image_name=image_name)
     for job in jobsketcher.sketch(backend, nchunks):
         yield job
 
@@ -57,7 +76,9 @@ def cli():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("job_description_file", help="Template describing job")
     parser.add_argument("dataset_path", help="Path to dataset to be analysed")
-    parser.add_argument("output_path", help="Path to where output will be written")
+    parser.add_argument(
+        "output_path",
+        help="Path to where output will be written")
     parser.add_argument(
         "-n",
         "--nchunks",
