@@ -23,9 +23,9 @@ def test_JobSpec_initialisation():
         dataset_path="/path/to/dataset",
         output_root="/tmp",
         hash_ids=[1, 2, 3],
-        docker_image_name="ubuntu")
+        image_name="ubuntu")
 
-    assert jobspec.docker_image_name == "ubuntu"
+    assert jobspec.image_name == "ubuntu"
 
 
 def test_JobSpec_getattr():
@@ -49,9 +49,9 @@ def test_JobSpec_getattr():
         dataset_path="/path/to/dataset",
         output_root="/tmp",
         hash_ids=[1, 2, 3],
-        docker_image_name="ubuntu")
+        image_name="ubuntu")
 
-    assert jobspec["docker_image_name"] == "ubuntu"
+    assert jobspec["image_name"] == "ubuntu"
 
 
 # Functional test.

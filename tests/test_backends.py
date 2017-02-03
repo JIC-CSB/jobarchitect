@@ -86,7 +86,7 @@ docker run
         '/outside/container/data',
         '/outside/container/output',
         [1, 2],
-        container_name='mycontainer')
+        image_name='mycontainer')
 
     actual_output = generate_docker_job(input_job)
 
