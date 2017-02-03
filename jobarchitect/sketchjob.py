@@ -1,5 +1,6 @@
 """Tool to create jobs to carry out analyses on datasets."""
 
+import os
 import argparse
 import collections
 
@@ -63,5 +64,27 @@ def sketchjob(template_path, dataset_path, output_root,
 
 def cli():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("job_description_file", help="Template describing job")
+    parser.add_argument("dataset_path", help="Path to dataset to be analysed")
+    parser.add_argument("output_path", help="Path to where output will be written")
+    parser.add_argument(
+        "-n",
+        "--nchunks",
+        default=1,
+        type=int,
+        help="Number of chunks the job should be split up into")
+    args = parser.parse_args()
 
-    parser.parse_args()
+    if not os.path.isfile(args.job_description_file):
+        parser.error("Job description file does not exist: {}".format(
+            args.job_description_file))
+
+    if not os.path.isdir(args.dataset_path):
+        parser.error("Dataset path does not exist: {}".format(
+            args.dataset_path))
+
+    for job in sketchjob(args.job_description_file,
+                         args.dataset_path,
+                         args.output_path,
+                         args.nchunks):
+        print(job)

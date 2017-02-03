@@ -132,13 +132,6 @@ def test_sketchjob(tmp_dir_fixture):  # NOQA
 
 def test_sketchjob_cli(tmp_dir_fixture):
 
-    # Test help message exists.
-    cmd = ['sketchjob']
-    subprocess.check_call(cmd)
-    cmd = ['sketchjob', '--help']
-    output = subprocess.check_output(cmd)
-    assert len(output.decode('utf8')) > 0
-
     # Create a job description file.
     program_template_path = os.path.join(tmp_dir_fixture, "job.tmpl")
     program_name = "sha1sum"
@@ -158,6 +151,7 @@ def test_sketchjob_cli(tmp_dir_fixture):
     ]
     script_calling_analyse_by_ids = subprocess.check_output(cmd)
 
+    print script_calling_analyse_by_ids
     assert script_calling_analyse_by_ids.find("_analyse_by_ids") != -1
 
     # Run the script produced by sketchjob.
