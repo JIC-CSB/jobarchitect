@@ -12,16 +12,19 @@ Added
 ^^^^^
 
 - ``sketchjob`` CLI
+- ``_analyse_by_ids`` CLI
+- Support script and files to build docker image
+- ``jobarchitect.JobSpec`` class
+- ``jobarchitect.agent.analyse_by_identifiers`` function
+- ``jobarchitect.agent.Agent`` class
+- ``jobarchitect.backends.generate_docker_job`` backend
 - ``jobarchitect.sketchjob.generate_jobspecs`` function
 - ``jobarchitect.sketchjob.sketch`` function
 - ``jobarchitect.sketchjob.JobSketcher`` class
-- ``_analyse_by_ids`` CLI
-- ``jobarchitect.agent.analyse_by_identifiers`` function
-- ``jobarchitect.agent.Agent`` class
-- ``jobarchitect.mkdir_parents`` function
-- ``jobarchitect.output_path_from_hash`` function
-- ``jobarchitect.split_dataset`` function
-- ``jobarchitect.path_from_hash`` function
+- ``jobarchitect.utils.mkdir_parents`` function
+- ``jobarchitect.utils.output_path_from_hash`` function
+- ``jobarchitect.utils.split_dataset`` function
+- ``jobarchitect.utils.path_from_hash`` function
 
 Changed
 ^^^^^^^
