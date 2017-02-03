@@ -1,7 +1,7 @@
 
 def test_generate_bash_job_single_line():
     from jobarchitect.backends import generate_bash_job
-    from jobarchitect.sketchjob import _JobSpec
+    from jobarchitect import JobSpec
 
     parameters = dict(
         program_template='shasum',
@@ -18,7 +18,7 @@ _analyse_by_ids \
   {hash_ids}
     """.format(**parameters)
 
-    input_job = _JobSpec(
+    input_job = JobSpec(
         'shasum',
         '/data',
         '/output',
@@ -30,7 +30,7 @@ _analyse_by_ids \
 
 def test_generate_bash_job_multi_line():
     from jobarchitect.backends import generate_bash_job
-    from jobarchitect.sketchjob import _JobSpec
+    from jobarchitect import JobSpec
 
     parameters = dict(
         program_template='shasum',
@@ -47,7 +47,7 @@ _analyse_by_ids \
   {hash_ids}
     """.format(**parameters)
 
-    input_job = _JobSpec(
+    input_job = JobSpec(
         'shasum',
         '/data',
         '/output',
@@ -58,6 +58,7 @@ _analyse_by_ids \
 
 
 def test_generate_docker_job_single_line():
+    from jobarchitect import JobSpec
 
     parameters = dict(
         program_template='sha1sum',
@@ -80,7 +81,7 @@ docker run
     {hash_ids}
  """.format(**parameters)
 
-    input_job = _JobSpec(
+    input_job = JobSpec(
         'sha1sum',
         '/outside/container/data',
         '/outside/container/output',

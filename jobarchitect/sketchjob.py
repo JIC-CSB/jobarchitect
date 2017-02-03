@@ -4,23 +4,14 @@ import os
 import argparse
 import collections
 
+from jobarchitect import JobSpec
 from jobarchitect.utils import split_dataset
 from jobarchitect.backends import generate_bash_job
-
-_JobSpec = collections.namedtuple(
-    '_JobSpec',
-    ['program_template',
-     'dataset_path',
-     'output_root',
-     'hash_ids'
-     ]
-)
-
 
 def generate_jobspecs(program_template, dataset_path, output_root, nchunks):
     for file_entry_list in split_dataset(dataset_path, nchunks):
         identifiers = [entry['hash'] for entry in file_entry_list]
-        yield _JobSpec(
+        yield JobSpec(
             program_template,
             dataset_path,
             output_root,
