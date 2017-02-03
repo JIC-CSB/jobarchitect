@@ -170,7 +170,7 @@ def test_sketchjob_with_docker_backend(local_tmp_dir_fixture):  # NOQA
         assert hash_from_output == entry["hash"]
 
 
-def test_sketchjob_cli(tmp_dir_fixture):
+def test_sketchjob_cli(tmp_dir_fixture):  # NOQA
 
     # Create a job description file.
     program_template_path = os.path.join(tmp_dir_fixture, "job.tmpl")
@@ -187,7 +187,7 @@ def test_sketchjob_cli(tmp_dir_fixture):
         program_template_path,
         TEST_SAMPLE_DATASET,
         tmp_dir_fixture,
-#       "--nchunks=1",  # Default is 1.
+        # "--nchunks=1",  # Default is 1.
     ]
     script_calling_analyse_by_ids = subprocess.check_output(cmd)
 

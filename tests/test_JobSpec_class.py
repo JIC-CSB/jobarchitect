@@ -2,6 +2,7 @@
 
 import pytest
 
+
 def test_JobSpec_initialisation():
     from jobarchitect import JobSpec
     jobspec = JobSpec(

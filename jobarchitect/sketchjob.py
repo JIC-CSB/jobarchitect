@@ -2,7 +2,6 @@
 
 import os
 import argparse
-import collections
 
 from jobarchitect import JobSpec
 from jobarchitect.utils import split_dataset
