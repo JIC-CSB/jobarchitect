@@ -7,6 +7,7 @@ from jobarchitect import JobSpec
 from jobarchitect.utils import split_dataset
 from jobarchitect.backends import (
     generate_bash_job,
+    generate_docker_job,
 )
 
 
@@ -57,7 +58,7 @@ class JobSketcher(object):
 
 
 def sketchjob(template_path, dataset_path, output_root,
-              nchunks, backend=generate_bash_job, image_name=None):
+              nchunks, backend, image_name=None):
     """Return list of jobs as strings."""
     with open(template_path, "r") as fh:
         program_template = fh.read().strip()
@@ -84,6 +85,16 @@ def cli():
         default=1,
         type=int,
         help="Number of chunks the job should be split up into")
+    backend_function_map = {'docker': generate_docker_job,
+                            'bash': generate_bash_job}
+    parser.add_argument(
+        "-b",
+        "--backend",
+        choices=backend_function_map.keys(),
+        default='bash')
+    parser.add_argument(
+        "-i",
+        "--image-name")
     args = parser.parse_args()
 
     if not os.path.isfile(args.job_description_file):
@@ -94,8 +105,15 @@ def cli():
         parser.error("Dataset path does not exist: {}".format(
             args.dataset_path))
 
+    if args.backend in ['docker']:
+        if args.image_name is None:
+            parser.error("""You must specify an image to use a container based
+backend ({})""".format(args.backend))
+
     for job in sketchjob(args.job_description_file,
                          args.dataset_path,
                          args.output_path,
-                         args.nchunks):
+                         args.nchunks,
+                         backend_function_map[args.backend],
+                         args.image_name):
         print(job)
