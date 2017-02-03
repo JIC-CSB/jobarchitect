@@ -11,6 +11,7 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
+- ``sketchjob`` CLI
 - ``jobarchitect.sketchjob.generate_jobspecs`` function
 - ``jobarchitect.sketchjob.sketch`` function
 - ``jobarchitect.sketchjob.JobSketcher`` class
