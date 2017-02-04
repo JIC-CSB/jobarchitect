@@ -1,0 +1,5 @@
+jobarchitect
+============
+
+.. automodule:: jobarchitect
+   :members:
