@@ -8,6 +8,7 @@ from jobarchitect.utils import split_dataset
 from jobarchitect.backends import (
     generate_bash_job,
     generate_docker_job,
+    render_script,
 )
 
 
@@ -133,10 +134,19 @@ def cli():
             parser.error("""You must specify an image to use a container based
 backend ({})""".format(args.backend))
 
-    for job in sketchjob(args.job_description_file,
-                         args.dataset_path,
-                         args.output_path,
-                         backend_function_map[args.backend],
-                         args.nchunks,
-                         args.image_name):
-        print(job)
+#   for job in sketchjob(args.job_description_file,
+#                        args.dataset_path,
+#                        args.output_path,
+#                        backend_function_map[args.backend],
+#                        args.nchunks,
+#                        args.image_name):
+#       print(job)
+
+    jobs = list(sketchjob(args.job_description_file,
+                          args.dataset_path,
+                          args.output_path,
+                          backend_function_map[args.backend],
+                          args.nchunks,
+                          args.image_name))
+    script = render_script("basic_bash_script.sh.j2", {"jobs": jobs})
+    print(script)
