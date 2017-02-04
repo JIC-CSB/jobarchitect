@@ -78,7 +78,8 @@ def output_path_from_hash(dataset_path, hash_str, output_root):
     :param hash_str: dataset item identifier as a hash string
     :param output_root: path to output root
     :raises: KeyError if hash string identifier is not in the dataset
-    :returns: absolute output path for a dataset item specified by the identifier
+    :returns: absolute output path for a dataset item specified by the
+              identifier
     """
 
     dataset_path = os.path.abspath(dataset_path)

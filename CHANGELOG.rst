@@ -10,6 +10,7 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
+- ``jobarchitect.backends.render_script`` function
 - Hosting of docs on `readthedocs <http://jobarchitect.readthedocs.io/>`_
 - API documentation to sphinx generated docs
 - Change log to sphinx generated docs

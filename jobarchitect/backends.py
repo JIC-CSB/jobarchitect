@@ -1,5 +1,10 @@
 """Job output backends."""
 
+from jinja2 import Environment, PackageLoader
+
+ENV = Environment(loader=PackageLoader('jobarchitect', 'templates'),
+                  keep_trailing_newline=True)
+
 
 def generate_bash_job(jobspec):
     """Return bash job script job as a string.
@@ -46,3 +51,10 @@ docker run  \
  """.format(**jobspec)
 
     return output
+
+
+def render_script(template_name, variables):
+    """Return script as a string.
+    """
+    template = ENV.get_template(template_name)
+    return template.render(variables)

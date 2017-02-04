@@ -92,3 +92,32 @@ docker run  \
     actual_output = generate_docker_job(input_job)
 
     assert expected_output == actual_output
+
+
+def test_render_script():
+    from jobarchitect.backends import render_script
+    variables = {"jobs": ["echo 1", "echo 2"]}
+    expected_output = """#!/bin/bash
+
+echo 1
+echo 2
+"""
+    script = render_script(
+        template_name="basic_bash_script.sh.j2",
+        variables=variables)
+    assert script == expected_output
+
+
+def test_render_slurm_script():
+    from jobarchitect.backends import render_script
+    variables = {"jobs": ["echo 1", "echo 2"],
+                 "partition": "short"}
+    expected_lines = [
+        "#!/bin/bash",
+        "#SBATCH --partition=short",
+        "srun echo 1",
+        "srun echo 2",
+    ]
+    script = render_script("basic_slurm_script.sh.j2", variables)
+    for line in expected_lines:
+        assert script.find(line) != -1
