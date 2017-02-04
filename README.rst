@@ -6,7 +6,7 @@ Architect jobs for running analyses
    :alt: PyPi package
 
 .. image:: https://readthedocs.org/projects/jobarchitect/badge/?version=latest
-   :target: https://readthedocs.org/projects/jobarchitect?badge=latest
+   :target: http://jobarchitect.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
 - Documentation: http://jobarchitect.readthedocs.io
