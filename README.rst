@@ -1,8 +1,8 @@
 Architect jobs for running analyses
 ===================================
 
-.. image:: https://badge.fury.io/py/dtool.svg
-   :target: http://badge.fury.io/py/dtool
+.. image:: https://badge.fury.io/py/jobarchitect.svg
+   :target: http://badge.fury.io/py/jobarchitect
    :alt: PyPi package
 
 .. image:: https://readthedocs.org/projects/jobarchitect/badge/?version=latest
