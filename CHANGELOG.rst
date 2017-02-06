@@ -5,19 +5,10 @@ This project uses `semantic versioning <http://semver.org/>`_.
 This change log uses principles from `keep a changelog <http://keepachangelog.com/>`_.
 
 [Unreleased]
-~~~~~~~~~~~~
+------------
 
 Added
 ^^^^^
-
-- singularity job command backend
-- sketchjob CLI options for selecting wrapper script
-- Templates for both job command and wrapper script creation
-- ``jobarchitect.backends.render_script`` function
-- Hosting of docs on `readthedocs <http://jobarchitect.readthedocs.io/>`_
-- API documentation to sphinx generated docs
-- Change log to sphinx generated docs
-- Better docstrings
 
 
 Changed
@@ -39,9 +30,24 @@ Fixed
 Security
 ^^^^^^^^
 
+[0.2.0] - 2017-02-06
+--------------------
+
+Added
+^^^^^
+
+- singularity job command backend
+- sketchjob CLI options for selecting wrapper script
+- Templates for both job command and wrapper script creation
+- ``jobarchitect.backends.render_script`` function
+- Hosting of docs on `readthedocs <http://jobarchitect.readthedocs.io/>`_
+- API documentation to sphinx generated docs
+- Change log to sphinx generated docs
+- Better docstrings
+
 
 [0.1.0] - 2017-02-03
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 Added
 ^^^^^
