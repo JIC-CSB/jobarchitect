@@ -2,5 +2,5 @@
 {% include 'slurm_options.j2' %}
 
 {% for job in jobs -%}
-srun {{ job }}
+{{ job }}
 {% endfor -%}

@@ -139,7 +139,7 @@ def cli():
         parser.error("Dataset path does not exist: {}".format(
             args.dataset_path))
 
-    if args.backend in ['docker']:
+    if args.backend in ['docker', 'singularity']:
         if args.image_name is None:
             parser.error("""You must specify an image to use a container based
 backend ({})""".format(args.backend))

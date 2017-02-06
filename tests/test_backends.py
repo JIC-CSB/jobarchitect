@@ -172,8 +172,8 @@ def test_render_slurm_script_single():
         "#!/bin/bash",
         "#SBATCH --partition=short",
         "#SBATCH --mem=3000",
-        "srun echo 1",
-        "srun echo 2",
+        "echo 1",
+        "echo 2",
     ]
     script = render_script("slurm_script_single.slurm.j2", variables)
     for line in expected_lines:

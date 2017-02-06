@@ -314,7 +314,8 @@ def test_sketchjob_singularity_job_command(tmp_dir_fixture):  # NOQA
         TEST_SAMPLE_DATASET,
         tmp_dir_fixture,
         # "--nchunks=1",  # Default is 1.
-        '--backend=singularity'
+        '--backend=singularity',
+        '--image-name=someimage'
     ]
     script_calling_analyse_by_ids = subprocess.check_output(cmd)
 
@@ -322,4 +323,4 @@ def test_sketchjob_singularity_job_command(tmp_dir_fixture):  # NOQA
         'utf-8').find("_analyse_by_ids") != -1
 
     assert script_calling_analyse_by_ids.decode(
-        'utf-8').find("singularity run") != -1
+        'utf-8').find("singularity exec") != -1
