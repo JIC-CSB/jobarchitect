@@ -8,6 +8,7 @@ from jobarchitect.utils import split_dataset
 from jobarchitect.backends import (
     generate_bash_job,
     generate_docker_job,
+    generate_singularity_job,
     render_script,
 )
 
@@ -110,6 +111,7 @@ def cli():
         type=int,
         help="Number of chunks the job should be split up into")
     backend_function_map = {'docker': generate_docker_job,
+                            'singularity': generate_singularity_job,
                             'bash': generate_bash_job}
     wrapper_script_map = {'slurm-single': "slurm_script_single.slurm.j2",
                           'slurm-multiple': "slurm_script_multiple.slurm.j2",

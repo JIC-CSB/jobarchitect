@@ -10,6 +10,7 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
+- singularity job command backend
 - sketchjob CLI options for selecting wrapper script
 - Templates for both job command and wrapper script creation
 - ``jobarchitect.backends.render_script`` function
