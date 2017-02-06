@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --partition={{ partition }}
+{% include 'slurm_options.j2' %}
 
 {% for job in jobs -%}
 srun {{ job }}
