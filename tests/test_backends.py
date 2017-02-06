@@ -11,7 +11,6 @@ def test_generate_bash_job_single_line():
 
     )
     expected_starts = [
-        "#!/bin/bash",
         "_analyse_by_ids",
         "--program_template={program_template}".format(**parameters),
         "--input_dataset_path={dataset_path}".format(**parameters),
@@ -46,7 +45,6 @@ def test_generate_bash_job_multi_line():
 
     )
     expected_starts = [
-        "#!/bin/bash",
         "_analyse_by_ids",
         "--program_template={program_template}".format(**parameters),
         "--input_dataset_path={dataset_path}".format(**parameters),
@@ -81,7 +79,6 @@ def test_generate_docker_job_single_line():
         image_name="ubuntu")
 
     expected_starts = [
-        "#!/bin/bash",
         "IMAGE_NAME={image_name}".format(**parameters),
         "docker run",
         "--rm",
@@ -125,16 +122,28 @@ echo 2
     assert script == expected_output
 
 
-def test_render_slurm_script():
+def test_render_slurm_script_single():
     from jobarchitect.backends import render_script
     variables = {"jobs": ["echo 1", "echo 2"],
-                 "partition": "short"}
+                 "partition": "short",
+                 "jobmem": 3000}
     expected_lines = [
         "#!/bin/bash",
         "#SBATCH --partition=short",
+        "#SBATCH --mem=3000",
         "srun echo 1",
         "srun echo 2",
     ]
-    script = render_script("basic_slurm_script.sh.j2", variables)
+    script = render_script("slurm_script_single.slurm.j2", variables)
     for line in expected_lines:
         assert script.find(line) != -1
+
+
+def test_render_slurm_script_multiple():
+    from jobarchitect.backends import render_script
+    variables = {"jobs": ["echo 1", "echo 2", "echo 3"],
+                 "partition": "short",
+                 "jobmem": 3000}
+
+    script = render_script("slurm_script_multiple.slurm.j2", variables)
+    assert script.count('#!/bin/bash') == 3
