@@ -265,3 +265,32 @@ def test_sketchjob_cli_with_docker_backend(local_tmp_dir_fixture):  # NOQA
             contents = fh.read()
         hash_from_output = contents.strip().split()[0]
         assert hash_from_output == entry["hash"]
+
+
+def test_sketchjob_slurm_wrapper_script(tmp_dir_fixture):  # NOQA
+
+    # Create a job description file.
+    program_template_path = os.path.join(tmp_dir_fixture, "job.tmpl")
+    program_name = "sha1sum"
+    if sys.platform == "darwin":
+        program_name = "shasum"
+    program_template = program_name + " {input_file} > {output_file}\n"
+    with open(program_template_path, "w") as fh:
+        fh.write(program_template)
+
+    # Run sketchjob and capture stdout.
+    cmd = [
+        "sketchjob",
+        program_template_path,
+        TEST_SAMPLE_DATASET,
+        tmp_dir_fixture,
+        # "--nchunks=1",  # Default is 1.
+        '--wrapper-script=slurm-single'
+    ]
+    script_calling_analyse_by_ids = subprocess.check_output(cmd)
+
+    assert script_calling_analyse_by_ids.decode(
+        'utf-8').find("_analyse_by_ids") != -1
+
+    assert script_calling_analyse_by_ids.decode(
+        'utf-8').find("#SBATCH") != -1

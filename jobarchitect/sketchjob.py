@@ -111,6 +111,9 @@ def cli():
         help="Number of chunks the job should be split up into")
     backend_function_map = {'docker': generate_docker_job,
                             'bash': generate_bash_job}
+    wrapper_script_map = {'slurm-single': "slurm_script_single.slurm.j2",
+                          'slurm-multiple': "slurm_script_multiple.slurm.j2",
+                          'bash': "basic_bash_script.sh.j2"}
     parser.add_argument(
         "-b",
         "--backend",
@@ -119,6 +122,11 @@ def cli():
     parser.add_argument(
         "-i",
         "--image-name")
+    parser.add_argument(
+        "-s",
+        "--wrapper-script",
+        choices=wrapper_script_map.keys(),
+        default='bash')
     args = parser.parse_args()
 
     if not os.path.isfile(args.job_description_file):
@@ -140,5 +148,7 @@ backend ({})""".format(args.backend))
                           backend_function_map[args.backend],
                           args.nchunks,
                           args.image_name))
-    script = render_script("basic_bash_script.sh.j2", {"jobs": jobs})
+    script = render_script(
+        wrapper_script_map[args.wrapper_script],
+        {"jobs": jobs, "partition": "rg-mh", "jobmem": 4000})
     print(script)
