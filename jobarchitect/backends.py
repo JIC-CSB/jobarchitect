@@ -15,16 +15,8 @@ def generate_bash_job(jobspec):
     :param jobspec: job specification as a :class:`jobarchitect.JobSpec`
     :returns: bash job script as a string
     """
-
-    output = """#!/bin/bash
-_analyse_by_ids \
-  --program_template={program_template} \
-  --input_dataset_path={dataset_path} \
-  --output_root={output_root} \
-  {hash_ids}
-    """.format(**jobspec)
-
-    return output
+    template = ENV.get_template("bash_job.sh.j2")
+    return template.render(jobspec)
 
 
 def generate_docker_job(jobspec):

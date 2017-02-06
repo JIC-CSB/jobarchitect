@@ -10,13 +10,14 @@ def test_generate_bash_job_single_line():
         hash_ids='c827a1a1a61e734828f525ae7715d9c5be591496',
 
     )
-    expected_output = """#!/bin/bash
-_analyse_by_ids \
-  --program_template={program_template} \
-  --input_dataset_path={dataset_path} \
-  --output_root={output_root} \
-  {hash_ids}
-    """.format(**parameters)
+    expected_starts = [
+        "#!/bin/bash",
+        "_analyse_by_ids",
+        "--program_template={program_template}".format(**parameters),
+        "--input_dataset_path={dataset_path}".format(**parameters),
+        "--output_root={output_root}".format(**parameters),
+        "{hash_ids}".format(**parameters)
+    ]
 
     input_job = JobSpec(
         'shasum',
@@ -25,7 +26,12 @@ _analyse_by_ids \
         ['c827a1a1a61e734828f525ae7715d9c5be591496'])
 
     actual_output = generate_bash_job(input_job)
-    assert expected_output == actual_output
+    actual_output_lines = actual_output.split("\n")
+    assert len(expected_starts) == len(actual_output_lines)
+
+    for actual, expected_start in zip(actual_output_lines, expected_starts):
+        actual = actual.strip()
+        assert actual.startswith(expected_start)
 
 
 def test_generate_bash_job_multi_line():
@@ -39,13 +45,14 @@ def test_generate_bash_job_multi_line():
         hash_ids="1 2",
 
     )
-    expected_output = """#!/bin/bash
-_analyse_by_ids \
-  --program_template={program_template} \
-  --input_dataset_path={dataset_path} \
-  --output_root={output_root} \
-  {hash_ids}
-    """.format(**parameters)
+    expected_starts = [
+        "#!/bin/bash",
+        "_analyse_by_ids",
+        "--program_template={program_template}".format(**parameters),
+        "--input_dataset_path={dataset_path}".format(**parameters),
+        "--output_root={output_root}".format(**parameters),
+        "{hash_ids}".format(**parameters)
+    ]
 
     input_job = JobSpec(
         'shasum',
@@ -54,7 +61,12 @@ _analyse_by_ids \
         [1, 2])
 
     actual_output = generate_bash_job(input_job)
-    assert expected_output == actual_output
+    actual_output_lines = actual_output.split("\n")
+    assert len(expected_starts) == len(actual_output_lines)
+
+    for actual, expected_start in zip(actual_output_lines, expected_starts):
+        actual = actual.strip()
+        assert actual.startswith(expected_start)
 
 
 def test_generate_docker_job_single_line():
