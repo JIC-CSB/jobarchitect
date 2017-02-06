@@ -108,6 +108,47 @@ def test_generate_docker_job_single_line():
         assert actual.startswith(expected_start)
 
 
+def test_generate_singularity_job_single_line():
+    from jobarchitect import JobSpec
+    from jobarchitect.backends import generate_singularity_job
+
+    parameters = dict(
+        program_template='sha1sum',
+        dataset_path='/outside/container/data',
+        output_root='/outside/container/output',
+        hash_ids="1 2",
+        image_name="ubuntu")
+
+    expected_starts = [
+        "IMAGE_NAME={image_name}".format(**parameters),
+        "singularity run",
+        "-B {dataset_path}:/input_dataset".format(**parameters),
+        "-B {output_root}:/output".format(**parameters),
+        "-c",
+        "$IMAGE_NAME",
+        "_analyse_by_ids",
+        "--program_template {program_template}".format(**parameters),
+        "--input_dataset_path=/input_dataset".format(**parameters),
+        "--output_root=/output".format(**parameters),
+        "{hash_ids}".format(**parameters),
+    ]
+
+    input_job = JobSpec(
+        'sha1sum',
+        '/outside/container/data',
+        '/outside/container/output',
+        [1, 2],
+        image_name='ubuntu')
+
+    actual_output = generate_singularity_job(input_job)
+    actual_output_lines = actual_output.split("\n")
+    assert len(actual_output_lines) == len(expected_starts)
+
+    for actual, expected_start in zip(actual_output_lines, expected_starts):
+        actual = actual.strip()
+        assert actual.startswith(expected_start)
+
+
 def test_render_script():
     from jobarchitect.backends import render_script
     variables = {"jobs": ["echo 1", "echo 2"]}
