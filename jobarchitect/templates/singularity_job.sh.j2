@@ -1,5 +1,5 @@
 IMAGE_NAME={{ image_name }}
-singularity run  \
+singularity exec  \
   -B {{ dataset_path }}:/input_dataset  \
   -B {{ output_root }}:/output  \
   -c \

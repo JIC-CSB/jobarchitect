@@ -121,7 +121,7 @@ def test_generate_singularity_job_single_line():
 
     expected_starts = [
         "IMAGE_NAME={image_name}".format(**parameters),
-        "singularity run",
+        "singularity exec",
         "-B {dataset_path}:/input_dataset".format(**parameters),
         "-B {output_root}:/output".format(**parameters),
         "-c",
