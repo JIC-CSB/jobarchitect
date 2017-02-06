@@ -27,22 +27,8 @@ def generate_docker_job(jobspec):
     :param jobspec: job specification as a :class:`jobarchitect.JobSpec`
     :returns: docker job script as a string
     """
-
-    output = """#!/bin/bash
-IMAGE_NAME={image_name}
-docker run  \
-  --rm  \
-  -v {dataset_path}:/input_dataset:ro  \
-  -v {output_root}:/output  \
-  $IMAGE_NAME  \
-  _analyse_by_ids  \
-    --program_template {program_template}  \
-    --input_dataset_path=/input_dataset  \
-    --output_root=/output  \
-    {hash_ids}
- """.format(**jobspec)
-
-    return output
+    template = ENV.get_template("docker_job.sh.j2")
+    return template.render(jobspec)
 
 
 def render_script(template_name, variables):

@@ -80,19 +80,20 @@ def test_generate_docker_job_single_line():
         hash_ids="1 2",
         image_name="ubuntu")
 
-    expected_output = """#!/bin/bash
-IMAGE_NAME={image_name}
-docker run  \
-  --rm  \
-  -v {dataset_path}:/input_dataset:ro  \
-  -v {output_root}:/output  \
-  $IMAGE_NAME  \
-  _analyse_by_ids  \
-    --program_template {program_template}  \
-    --input_dataset_path=/input_dataset  \
-    --output_root=/output  \
-    {hash_ids}
- """.format(**parameters)
+    expected_starts = [
+        "#!/bin/bash",
+        "IMAGE_NAME={image_name}".format(**parameters),
+        "docker run",
+        "--rm",
+        "-v {dataset_path}:/input_dataset:ro".format(**parameters),
+        "-v {output_root}:/output".format(**parameters),
+        "$IMAGE_NAME",
+        "_analyse_by_ids",
+        "--program_template {program_template}".format(**parameters),
+        "--input_dataset_path=/input_dataset".format(**parameters),
+        "--output_root=/output".format(**parameters),
+        "{hash_ids}".format(**parameters),
+    ]
 
     input_job = JobSpec(
         'sha1sum',
@@ -102,8 +103,12 @@ docker run  \
         image_name='ubuntu')
 
     actual_output = generate_docker_job(input_job)
+    actual_output_lines = actual_output.split("\n")
+    assert len(actual_output_lines) == len(expected_starts)
 
-    assert expected_output == actual_output
+    for actual, expected_start in zip(actual_output_lines, expected_starts):
+        actual = actual.strip()
+        assert actual.startswith(expected_start)
 
 
 def test_render_script():
