@@ -16,6 +16,7 @@ Changed
 
 - Move ``JobSpec`` from ``jobarchitect`` to ``jobarchitect.backends`` module
 - ``JobSpec`` class now stores absolute paths
+- Update Dockerfile to set entrypoint to sketchjob
 
 
 Deprecated
