@@ -14,6 +14,7 @@ Added
 Changed
 ^^^^^^^
 
+- Move ``JobSpec`` from ``jobarchitect`` to ``jobarchitect.backends`` module
 - ``JobSpec`` class now stores absolute paths
 
 

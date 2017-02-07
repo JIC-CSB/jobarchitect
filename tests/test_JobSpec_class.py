@@ -8,7 +8,7 @@ from . import chdir_fixture  # NOQA
 
 
 def test_JobSpec_initialisation():
-    from jobarchitect import JobSpec
+    from jobarchitect.backends import JobSpec
     jobspec = JobSpec(
         program_template="echo {input_file} > {output_file}",
         dataset_path="/path/to/dataset",
@@ -34,7 +34,7 @@ def test_JobSpec_initialisation():
 
 
 def test_JobSpec_getattr():
-    from jobarchitect import JobSpec
+    from jobarchitect.backends import JobSpec
     jobspec = JobSpec(
         program_template="echo {input_file} > {output_file}",
         dataset_path="/path/to/dataset",
@@ -60,7 +60,7 @@ def test_JobSpec_getattr():
 
 
 def test_JobSpec_creates_abspaths(chdir_fixture):  # NOQA
-    from jobarchitect import JobSpec
+    from jobarchitect.backends import JobSpec
 
     jobspec = JobSpec(
         program_template="echo {input_file} > {output_file}",
@@ -74,8 +74,7 @@ def test_JobSpec_creates_abspaths(chdir_fixture):  # NOQA
 
 # Functional test.
 def test_JobSpec_works_with_generate_bash_job_backend():
-    from jobarchitect import JobSpec
-    from jobarchitect.backends import generate_bash_job
+    from jobarchitect.backends import JobSpec, generate_bash_job
 
     jobspec = JobSpec(
         program_template="echo {input_file} > {output_file}",

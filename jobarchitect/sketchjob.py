@@ -3,9 +3,9 @@
 import os
 import argparse
 
-from jobarchitect import JobSpec
 from jobarchitect.utils import split_dataset
 from jobarchitect.backends import (
+    JobSpec,
     generate_bash_job,
     generate_docker_job,
     generate_singularity_job,

@@ -9,7 +9,7 @@ from . import tmp_dir_fixture, local_tmp_dir_fixture  # NOQA
 
 
 def test_generate_jobspecs():
-    from jobarchitect import JobSpec
+    from jobarchitect.backends import JobSpec
     from jobarchitect.sketchjob import generate_jobspecs
     jobspecs = list(generate_jobspecs(
         program_template="program",
@@ -65,7 +65,7 @@ def test_jobsketcher_generate_jobspecs():
 
     jobspecs = list(jobsketcher._generate_jobspecs(nchunks=1))
     assert len(jobspecs) == 1
-    from jobarchitect import JobSpec
+    from jobarchitect.backends import JobSpec
     assert isinstance(jobspecs[0], JobSpec)
 
 

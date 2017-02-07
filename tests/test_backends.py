@@ -1,7 +1,6 @@
 
 def test_generate_bash_job_single_line():
-    from jobarchitect.backends import generate_bash_job
-    from jobarchitect import JobSpec
+    from jobarchitect.backends import generate_bash_job, JobSpec
 
     parameters = dict(
         program_template='shasum',
@@ -34,8 +33,7 @@ def test_generate_bash_job_single_line():
 
 
 def test_generate_bash_job_multi_line():
-    from jobarchitect.backends import generate_bash_job
-    from jobarchitect import JobSpec
+    from jobarchitect.backends import generate_bash_job, JobSpec
 
     parameters = dict(
         program_template='shasum',
@@ -68,8 +66,7 @@ def test_generate_bash_job_multi_line():
 
 
 def test_generate_docker_job_single_line():
-    from jobarchitect import JobSpec
-    from jobarchitect.backends import generate_docker_job
+    from jobarchitect.backends import generate_docker_job, JobSpec
 
     parameters = dict(
         program_template='sha1sum',
@@ -109,8 +106,7 @@ def test_generate_docker_job_single_line():
 
 
 def test_generate_singularity_job_single_line():
-    from jobarchitect import JobSpec
-    from jobarchitect.backends import generate_singularity_job
+    from jobarchitect.backends import generate_singularity_job, JobSpec
 
     parameters = dict(
         program_template='sha1sum',
