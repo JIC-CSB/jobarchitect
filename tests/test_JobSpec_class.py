@@ -1,6 +1,10 @@
 """Test the JobSpec class."""
 
+import os
+
 import pytest
+
+from . import chdir_fixture  # NOQA
 
 
 def test_JobSpec_initialisation():
@@ -53,6 +57,19 @@ def test_JobSpec_getattr():
         image_name="ubuntu")
 
     assert jobspec["image_name"] == "ubuntu"
+
+
+def test_JobSpec_creates_abspaths(chdir_fixture):  # NOQA
+    from jobarchitect import JobSpec
+
+    jobspec = JobSpec(
+        program_template="echo {input_file} > {output_file}",
+        dataset_path="dataset",
+        output_root="tmp",
+        hash_ids=[1, 2, 3])
+
+    assert os.path.isabs(jobspec.dataset_path)
+    assert os.path.isabs(jobspec.output_root)
 
 
 # Functional test.

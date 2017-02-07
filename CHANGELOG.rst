@@ -14,6 +14,8 @@ Added
 Changed
 ^^^^^^^
 
+- ``JobSpec`` class now stores absolute paths
+
 
 Deprecated
 ^^^^^^^^^^
@@ -25,6 +27,7 @@ Removed
 
 Fixed
 ^^^^^
+
 
 
 Security

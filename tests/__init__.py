@@ -11,6 +11,18 @@ TEST_SAMPLE_DATASET = os.path.join(_HERE, "data", "sample_data")
 
 
 @pytest.fixture
+def chdir_fixture(request):
+    d = tempfile.mkdtemp()
+    curdir = os.getcwd()
+    os.chdir(d)
+
+    @request.addfinalizer
+    def teardown():
+        os.chdir(curdir)
+        shutil.rmtree(d)
+
+
+@pytest.fixture
 def tmp_dir_fixture(request):
     d = tempfile.mkdtemp()
 

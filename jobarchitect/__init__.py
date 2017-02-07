@@ -1,5 +1,7 @@
 """jobarchitect package."""
 
+import os
+
 __version__ = "0.2.0"
 
 
@@ -11,8 +13,8 @@ class JobSpec(object):
 
         self._spec = dict()
         self._spec["program_template"] = program_template
-        self._spec["dataset_path"] = dataset_path
-        self._spec["output_root"] = output_root
+        self._spec["dataset_path"] = os.path.abspath(dataset_path)
+        self._spec["output_root"] = os.path.abspath(output_root)
         self._spec["hash_ids"] = " ".join([str(i) for i in hash_ids])
         if image_name is not None:
             self._spec["image_name"] = image_name
