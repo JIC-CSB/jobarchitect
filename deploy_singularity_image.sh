@@ -11,5 +11,4 @@ docker run \
     --rm \
     mcdocker2singularity \
     jicscicomp/jobarchitect \
-    jobarchitect
-
+    sketchjob
