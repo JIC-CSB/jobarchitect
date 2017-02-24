@@ -8,5 +8,6 @@ Content
    :maxdepth: 2
 
    README
+   cwl
    api
    CHANGELOG
