@@ -2,8 +2,21 @@
 
 import os
 import errno
+import shutil
+import tempfile
+import contextlib
 
 from dtool import DataSet
+
+
+@contextlib.contextmanager
+def tmp_dir_context():
+    d = tempfile.mkdtemp()
+
+    try:
+        yield d
+    finally:
+        shutil.rmtree(d)
 
 
 def mkdir_parents(path):
