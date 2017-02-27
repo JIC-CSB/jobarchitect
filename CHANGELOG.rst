@@ -14,6 +14,7 @@ Added
 Changed
 ^^^^^^^
 
+- Now using CWL (Common Workflow Language) to specify program to be run on dataset.
 
 Deprecated
 ^^^^^^^^^^
