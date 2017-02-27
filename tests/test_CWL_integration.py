@@ -21,7 +21,7 @@ def test_agent_initialisation():
 
 
 def test_cwl_dependency():
-    import cwltool
+    import cwltool  # NOQA
 
 
 def test_agent_cwl_job_generation():
