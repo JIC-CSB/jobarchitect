@@ -6,32 +6,33 @@ import subprocess
 
 from . import TEST_SAMPLE_DATASET
 from . import tmp_dir_fixture, local_tmp_dir_fixture  # NOQA
+from . import shasum_cwl_tool_wrapper, sha1sum_cwl_tool_wrapper
 
 
 def test_generate_jobspecs():
     from jobarchitect.backends import JobSpec
     from jobarchitect.sketchjob import generate_jobspecs
     jobspecs = list(generate_jobspecs(
-        program_template="program",
+        cwl_tool_wrapper_path="shasum.cwl",
         dataset_path=TEST_SAMPLE_DATASET,
         output_root="/tmp",
         nchunks=1))
     assert len(jobspecs) == 1
     assert isinstance(jobspecs[0], JobSpec)
-    assert jobspecs[0].program_template == "program"
+    assert jobspecs[0].cwl_tool_wrapper_path == "shasum.cwl"
     assert jobspecs[0].dataset_path == TEST_SAMPLE_DATASET
     assert jobspecs[0].output_root == "/tmp"
     assert len(jobspecs[0].hash_ids.split()) == 7
 
     jobspecs = list(generate_jobspecs(
-        program_template="program",
+        cwl_tool_wrapper_path="shasum.cwl",
         dataset_path=TEST_SAMPLE_DATASET,
         output_root="/tmp",
         nchunks=2))
     assert len(jobspecs) == 2
 
     jobspecs = list(generate_jobspecs(
-        program_template="program",
+        cwl_tool_wrapper_path="shasum.cwl",
         dataset_path=TEST_SAMPLE_DATASET,
         output_root="/tmp",
         nchunks=7))
@@ -45,12 +46,11 @@ def test_jobsketcher_initialisation():
     from jobarchitect.sketchjob import JobSketcher
 
     jobsketcher = JobSketcher(
-        program_template='shasum {input_file} > {output_file}',
+        cwl_tool_wrapper_path='shasum.cwl',
         dataset_path='/path/to/dataset',
         output_root='/tmp/output')
 
-    assert jobsketcher.program_template == \
-        'shasum {input_file} > {output_file}'
+    assert jobsketcher.cwl_tool_wrapper_path == 'shasum.cwl'
     assert jobsketcher.dataset_path == '/path/to/dataset'
     assert jobsketcher.output_root == '/tmp/output'
 
@@ -59,7 +59,7 @@ def test_jobsketcher_generate_jobspecs():
     from jobarchitect.sketchjob import JobSketcher
 
     jobsketcher = JobSketcher(
-        program_template='shasum {input_file} > {output_file}',
+        cwl_tool_wrapper_path='shasum.cwl',
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output')
 
@@ -74,14 +74,14 @@ def test_jobsketcher_sketch():
     from jobarchitect.backends import generate_bash_job
 
     jobsketcher = JobSketcher(
-        program_template='shasum {input_file} > {output_file}',
+        cwl_tool_wrapper_path='shasum.cwl',
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output')
 
     bash_lines = list(jobsketcher.sketch(backend=generate_bash_job, nchunks=1))
 
     jobspec_generator = generate_jobspecs(
-        program_template='shasum {input_file} > {output_file}',
+        cwl_tool_wrapper_path='shasum.cwl',
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output',
         nchunks=1)
@@ -97,18 +97,12 @@ def test_sketchjob(tmp_dir_fixture):  # NOQA
     from jobarchitect.sketchjob import sketchjob
     from jobarchitect.backends import generate_bash_job
 
-    program_template_path = os.path.join(tmp_dir_fixture, "job.tmpl")
-
-    program_name = "sha1sum"
+    cwl_tool_wrapper_path = sha1sum_cwl_tool_wrapper
     if sys.platform == "darwin":
-        program_name = "shasum"
-    program_template = program_name + " {input_file} > {output_file}\n"
-
-    with open(program_template_path, "w") as fh:
-        fh.write(program_template)
+        cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     bash_lines = sketchjob(
-        template_path=program_template_path,
+        cwl_tool_wrapper_path=cwl_tool_wrapper_path,
         dataset_path=TEST_SAMPLE_DATASET,
         output_root=tmp_dir_fixture,
         nchunks=1,
@@ -138,13 +132,8 @@ def test_sketchjob_with_docker_backend(local_tmp_dir_fixture):  # NOQA
     from jobarchitect.sketchjob import sketchjob
     from jobarchitect.backends import generate_docker_job
 
-    program_template_path = os.path.join(local_tmp_dir_fixture, "job.tmpl")
-    program_template = "sha1sum {input_file} > {output_file}\n"
-    with open(program_template_path, "w") as fh:
-        fh.write(program_template)
-
     bash_lines = sketchjob(
-        template_path=program_template_path,
+        cwl_tool_wrapper_path=sha1sum_cwl_tool_wrapper,
         dataset_path=TEST_SAMPLE_DATASET,
         output_root=local_tmp_dir_fixture,
         nchunks=1,
@@ -172,19 +161,14 @@ def test_sketchjob_with_docker_backend(local_tmp_dir_fixture):  # NOQA
 
 def test_sketchjob_cli(tmp_dir_fixture):  # NOQA
 
-    # Create a job description file.
-    program_template_path = os.path.join(tmp_dir_fixture, "job.tmpl")
-    program_name = "sha1sum"
+    cwl_tool_wrapper_path = sha1sum_cwl_tool_wrapper
     if sys.platform == "darwin":
-        program_name = "shasum"
-    program_template = program_name + " {input_file} > {output_file}\n"
-    with open(program_template_path, "w") as fh:
-        fh.write(program_template)
+        cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     # Run sketchjob and capture stdout.
     cmd = [
         "sketchjob",
-        program_template_path,
+        cwl_tool_wrapper_path,
         TEST_SAMPLE_DATASET,
         tmp_dir_fixture,
         # "--nchunks=1",  # Default is 1.
@@ -221,16 +205,10 @@ def test_sketchjob_cli(tmp_dir_fixture):  # NOQA
 
 def test_sketchjob_cli_with_docker_backend(local_tmp_dir_fixture):  # NOQA
 
-    # Create a job description file.
-    program_template_path = os.path.join(local_tmp_dir_fixture, "job.tmpl")
-    program_template = "sha1sum {input_file} > {output_file}\n"
-    with open(program_template_path, "w") as fh:
-        fh.write(program_template)
-
     # Run sketchjob and capture stdout.
     cmd = [
         "sketchjob",
-        program_template_path,
+        sha1sum_cwl_tool_wrapper,
         TEST_SAMPLE_DATASET,
         local_tmp_dir_fixture,
         # "--nchunks=1",  # Default is 1.

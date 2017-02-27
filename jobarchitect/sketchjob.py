@@ -14,7 +14,7 @@ from jobarchitect.backends import (
 
 
 def generate_jobspecs(
-        program_template,
+        cwl_tool_wrapper_path,
         dataset_path,
         output_root,
         nchunks,
@@ -22,7 +22,7 @@ def generate_jobspecs(
         ):
     """Return generator yielding instances of :class:`jobarchitect.JobSec`.
 
-    :param program_template: program template string
+    :param cwl_tool_wrapper_path: path to CWL tool wrapper
     :param dataset_path: path to input dataset
     :param output_root: path to output root
     :param nchunks: number of chunks the job should be split into
@@ -32,7 +32,7 @@ def generate_jobspecs(
     for file_entry_list in split_dataset(dataset_path, nchunks):
         identifiers = [entry['hash'] for entry in file_entry_list]
         yield JobSpec(
-            program_template,
+            cwl_tool_wrapper_path,
             dataset_path,
             output_root,
             identifiers,
@@ -45,18 +45,18 @@ class JobSketcher(object):
 
     def __init__(
             self,
-            program_template,
+            cwl_tool_wrapper_path,
             dataset_path,
             output_root,
             image_name=None
             ):
-        self.program_template = program_template
+        self.cwl_tool_wrapper_path = cwl_tool_wrapper_path
         self.dataset_path = dataset_path
         self.output_root = output_root
         self.image_name = image_name
 
     def _generate_jobspecs(self, nchunks):
-        for jobspec in generate_jobspecs(self.program_template,
+        for jobspec in generate_jobspecs(self.cwl_tool_wrapper_path,
                                          self.dataset_path,
                                          self.output_root,
                                          nchunks,
@@ -74,22 +74,19 @@ class JobSketcher(object):
             yield backend(jobspec)
 
 
-def sketchjob(template_path, dataset_path, output_root,
+def sketchjob(cwl_tool_wrapper_path, dataset_path, output_root,
               backend, nchunks, image_name=None):
     """Return list of jobs as strings.
 
-    :param template_path: path to program template file
+    :param cwl_tool_wrapper_path: path to CWL tool wrapper
     :param dataset_path: path to input dataset
     :param output_root: path to output root
     :param backend: backend function for generating job scripts
     :param nchunks: number of chunks the job should be split into
     :returns: generator yielding jobs as strings
     """
-    with open(template_path, "r") as fh:
-        program_template = fh.read().strip()
-    program_template = '"{}"'.format(program_template)
     jobsketcher = JobSketcher(
-        program_template=program_template,
+        cwl_tool_wrapper_path=cwl_tool_wrapper_path,
         dataset_path=dataset_path,
         output_root=output_root,
         image_name=image_name)

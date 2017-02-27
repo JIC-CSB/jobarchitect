@@ -36,7 +36,8 @@ class Agent(object):
             with open(job_filename, 'w') as fh:
                 json.dump(cwl_job_description, fh)
 
-            command = ['cwltool', self.cwl_tool_wrapper_path, job_filename]
+            command = ['cwltool', '--quiet',
+                       self.cwl_tool_wrapper_path, job_filename]
             subprocess.call(command, cwd=self.output_root)
 
     def create_cwl_job(self, hash_str):
