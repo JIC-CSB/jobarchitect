@@ -3,7 +3,7 @@ def test_generate_bash_job_single_line():
     from jobarchitect.backends import generate_bash_job, JobSpec
 
     parameters = dict(
-        program_template='shasum',
+        cwl_tool_wrapper_path='shasum.cwl',
         dataset_path='/data',
         output_root='/output',
         hash_ids='c827a1a1a61e734828f525ae7715d9c5be591496',
@@ -11,14 +11,14 @@ def test_generate_bash_job_single_line():
     )
     expected_starts = [
         "_analyse_by_ids",
-        "--program_template={program_template}".format(**parameters),
+        "--cwl_tool_wrapper_path={cwl_tool_wrapper_path}".format(**parameters),
         "--input_dataset_path={dataset_path}".format(**parameters),
         "--output_root={output_root}".format(**parameters),
         "{hash_ids}".format(**parameters)
     ]
 
     input_job = JobSpec(
-        'shasum',
+        'shasum.cwl',
         '/data',
         '/output',
         ['c827a1a1a61e734828f525ae7715d9c5be591496'])
@@ -36,7 +36,7 @@ def test_generate_bash_job_multi_line():
     from jobarchitect.backends import generate_bash_job, JobSpec
 
     parameters = dict(
-        program_template='shasum',
+        cwl_tool_wrapper_path='shasum.cwl',
         dataset_path='/data',
         output_root='/output',
         hash_ids="1 2",
@@ -44,14 +44,14 @@ def test_generate_bash_job_multi_line():
     )
     expected_starts = [
         "_analyse_by_ids",
-        "--program_template={program_template}".format(**parameters),
+        "--cwl_tool_wrapper_path={cwl_tool_wrapper_path}".format(**parameters),
         "--input_dataset_path={dataset_path}".format(**parameters),
         "--output_root={output_root}".format(**parameters),
         "{hash_ids}".format(**parameters)
     ]
 
     input_job = JobSpec(
-        'shasum',
+        'shasum.cwl',
         '/data',
         '/output',
         [1, 2])
@@ -69,7 +69,7 @@ def test_generate_docker_job_single_line():
     from jobarchitect.backends import generate_docker_job, JobSpec
 
     parameters = dict(
-        program_template='sha1sum',
+        cwl_tool_wrapper_path='sha1sum.cwl',
         dataset_path='/outside/container/data',
         output_root='/outside/container/output',
         hash_ids="1 2",
@@ -83,14 +83,14 @@ def test_generate_docker_job_single_line():
         "-v {output_root}:/output".format(**parameters),
         "$IMAGE_NAME",
         "_analyse_by_ids",
-        "--program_template {program_template}".format(**parameters),
+        "--cwl_tool_wrapper_path {cwl_tool_wrapper_path}".format(**parameters),
         "--input_dataset_path=/input_dataset".format(**parameters),
         "--output_root=/output".format(**parameters),
         "{hash_ids}".format(**parameters),
     ]
 
     input_job = JobSpec(
-        'sha1sum',
+        'sha1sum.cwl',
         '/outside/container/data',
         '/outside/container/output',
         [1, 2],
@@ -109,7 +109,7 @@ def test_generate_singularity_job_single_line():
     from jobarchitect.backends import generate_singularity_job, JobSpec
 
     parameters = dict(
-        program_template='sha1sum',
+        cwl_tool_wrapper_path='sha1sum.cwl',
         dataset_path='/outside/container/data',
         output_root='/outside/container/output',
         hash_ids="1 2",
@@ -123,14 +123,14 @@ def test_generate_singularity_job_single_line():
         "-c",
         "$IMAGE_NAME",
         "_analyse_by_ids",
-        "--program_template {program_template}".format(**parameters),
+        "--cwl_tool_wrapper_path {cwl_tool_wrapper_path}".format(**parameters),
         "--input_dataset_path=/input_dataset".format(**parameters),
         "--output_root=/output".format(**parameters),
         "{hash_ids}".format(**parameters),
     ]
 
     input_job = JobSpec(
-        'sha1sum',
+        'sha1sum.cwl',
         '/outside/container/data',
         '/outside/container/output',
         [1, 2],
