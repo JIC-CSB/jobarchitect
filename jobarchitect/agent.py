@@ -15,8 +15,13 @@ from jobarchitect.utils import (
 class Agent(object):
     """Class to create commands to analyse data."""
 
-    def __init__(self, cwl_tool_wrapper, dataset_path, output_root="/tmp"):
-        self.cwl_tool_wrapper = os.path.abspath(cwl_tool_wrapper)
+    def __init__(
+        self,
+        cwl_tool_wrapper_path,
+        dataset_path,
+        output_root="/tmp"
+    ):
+        self.cwl_tool_wrapper_path = os.path.abspath(cwl_tool_wrapper_path)
         self.dataset_path = dataset_path
         self.output_root = output_root
 
@@ -31,7 +36,7 @@ class Agent(object):
             with open(job_filename, 'w') as fh:
                 json.dump(cwl_job_description, fh)
 
-            command = ['cwltool', self.cwl_tool_wrapper, job_filename]
+            command = ['cwltool', self.cwl_tool_wrapper_path, job_filename]
             subprocess.call(command, cwd=self.output_root)
 
     def create_cwl_job(self, hash_str):
@@ -50,15 +55,15 @@ class Agent(object):
 
 
 def analyse_by_identifiers(
-        cwl_tool_wrapper, dataset_path, output_root, identifiers):
+        cwl_tool_wrapper_path, dataset_path, output_root, identifiers):
     """Run analysis on identifiers.
 
-    :param cwl_tool_wrapper: path to cwl tool wrapper
+    :param cwl_tool_wrapper_path: path to cwl tool wrapper
     :param dataset_path: path to input dataset
     :param output_root: path to output root
     :identifiers: list of identifiers
     """
-    agent = Agent(cwl_tool_wrapper, dataset_path, output_root)
+    agent = Agent(cwl_tool_wrapper_path, dataset_path, output_root)
     for i in identifiers:
         agent.run_analysis(i)
 
@@ -68,7 +73,7 @@ def cli():
 
     parser = argparse.ArgumentParser(description=__doc__)
 
-    parser.add_argument('--cwl_tool_wrapper', required=True)
+    parser.add_argument('--cwl_tool_wrapper_path', required=True)
     parser.add_argument('--input_dataset_path', required=True)
     parser.add_argument('--output_root', required=True)
     parser.add_argument('identifiers', nargs=argparse.REMAINDER)
@@ -76,7 +81,7 @@ def cli():
     args = parser.parse_args()
 
     analyse_by_identifiers(
-        args.cwl_tool_wrapper,
+        args.cwl_tool_wrapper_path,
         args.input_dataset_path,
         args.output_root,
         args.identifiers)

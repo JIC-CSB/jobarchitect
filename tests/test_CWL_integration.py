@@ -12,10 +12,10 @@ from . import shasum_cwl_tool_wrapper, sha1sum_cwl_tool_wrapper
 def test_agent_initialisation():
     from jobarchitect.agent import Agent
 
-    cwl_tool_wrapper = shasum_cwl_tool_wrapper
+    cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     agent = Agent(dataset_path=TEST_SAMPLE_DATASET,
-                  cwl_tool_wrapper=cwl_tool_wrapper)
+                  cwl_tool_wrapper_path=cwl_tool_wrapper_path)
 
     assert agent.output_root == "/tmp"
 
@@ -29,7 +29,7 @@ def test_agent_cwl_job_generation():
 
     # program_template = "shasum {input_file} > {output_file}"
     agent = Agent(dataset_path=TEST_SAMPLE_DATASET,
-                  cwl_tool_wrapper=shasum_cwl_tool_wrapper,
+                  cwl_tool_wrapper_path=shasum_cwl_tool_wrapper,
                   output_root="/tmp/output")
 
     from jobarchitect.utils import path_from_hash, output_path_from_hash
@@ -55,12 +55,12 @@ def test_agent_cwl_job_generation():
 def test_run_analysis_with_cwl(tmp_dir_fixture):  # NOQA
     from jobarchitect.agent import Agent
 
-    cwl_tool_wrapper = sha1sum_cwl_tool_wrapper
+    cwl_tool_wrapper_path = sha1sum_cwl_tool_wrapper
     if sys.platform == "darwin":
-        cwl_tool_wrapper = shasum_cwl_tool_wrapper
+        cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     agent = Agent(dataset_path=TEST_SAMPLE_DATASET,
-                  cwl_tool_wrapper=cwl_tool_wrapper,
+                  cwl_tool_wrapper_path=cwl_tool_wrapper_path,
                   output_root=tmp_dir_fixture)
 
     from jobarchitect.utils import output_path_from_hash
@@ -90,12 +90,12 @@ def test_analyse_by_identifiers_with_cwl(tmp_dir_fixture):  # NOQA
         tmp_dir_fixture)
     assert not os.path.isfile(expected_output_path)
 
-    cwl_tool_wrapper = sha1sum_cwl_tool_wrapper
+    cwl_tool_wrapper_path = sha1sum_cwl_tool_wrapper
     if sys.platform == "darwin":
-        cwl_tool_wrapper = shasum_cwl_tool_wrapper
+        cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     analyse_by_identifiers(
-        cwl_tool_wrapper=cwl_tool_wrapper,
+        cwl_tool_wrapper_path=cwl_tool_wrapper_path,
         dataset_path=TEST_SAMPLE_DATASET,
         output_root=tmp_dir_fixture,
         identifiers=['c827a1a1a61e734828f525ae7715d9c5be591496'])
@@ -120,12 +120,12 @@ def test_analyse_by_identifiers_with_multiple_identifiers(tmp_dir_fixture):  # N
     assert not os.path.isfile(expected_output_paths[0])
     assert not os.path.isfile(expected_output_paths[1])
 
-    cwl_tool_wrapper = sha1sum_cwl_tool_wrapper
+    cwl_tool_wrapper_path = sha1sum_cwl_tool_wrapper
     if sys.platform == "darwin":
-        cwl_tool_wrapper = shasum_cwl_tool_wrapper
+        cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     analyse_by_identifiers(
-        cwl_tool_wrapper=cwl_tool_wrapper,
+        cwl_tool_wrapper_path=cwl_tool_wrapper_path,
         dataset_path=TEST_SAMPLE_DATASET,
         output_root=tmp_dir_fixture,
         identifiers=identifiers)
@@ -139,15 +139,15 @@ def test_analyse_by_identifiers_with_multiple_identifiers(tmp_dir_fixture):  # N
 
 
 def test_command_line_invocation(tmp_dir_fixture):  # NOQA
-    cwl_tool_wrapper = sha1sum_cwl_tool_wrapper
+    cwl_tool_wrapper_path = sha1sum_cwl_tool_wrapper
     if sys.platform == "darwin":
-        cwl_tool_wrapper = shasum_cwl_tool_wrapper
+        cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     identifiers = ['c827a1a1a61e734828f525ae7715d9c5be591496',
                    '290d3f1a902c452ce1c184ed793b1d6b83b59164']
 
     cmd = ['_analyse_by_ids',
-           '--cwl_tool_wrapper={}'.format(cwl_tool_wrapper),
+           '--cwl_tool_wrapper_path={}'.format(cwl_tool_wrapper_path),
            '--input_dataset_path={}'.format(TEST_SAMPLE_DATASET),
            '--output_root={}'.format(tmp_dir_fixture),
            ]
