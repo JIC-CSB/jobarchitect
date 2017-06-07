@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import contextlib
 
-from dtool import DataSet
+from dtoolcore import DataSet
 
 
 @contextlib.contextmanager
