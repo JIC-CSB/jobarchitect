@@ -7,50 +7,52 @@ When Jobarchitect uses CWL to run its jobs, it makes use of two hardcoded parame
 input_file and output_file. These are then dynamically generated from items in the
 dataset.
 
-A simple example wrapping the ``cp`` command looks like this:
+An example wrapping the ``cp`` command looks like this:
 
 .. code-block:: yaml
 
-    cwlVersion: cwl:draft-3
+    cwlVersion: v1.0
     class: CommandLineTool
     baseCommand: cp
     inputs:
-      - id: input_file
-        type: string
+      input_file:
+        type: File
         inputBinding:
           position: 1
-      - id: output_file
+      output_file:
         type: string
         inputBinding:
           position: 2
-    outputs: []
-
-A more complicated example using redirection (such that output is captured from stdout):
-
-.. code-block:: yaml
-
-    cwlVersion: cwl:draft-3
-    class: CommandLineTool
-    baseCommand: shasum
-    stdout: $(inputs['output_file'])
-    inputs:
-      - id: input_file
-        type: string
-        inputBinding:
-          position: 1
-      - id: output_file
-        type: string
     outputs:
-      - id: output_file
-        type: File
-        outputBinding:
-          glob: $(inputs['output_file'])
+       an_output_file:
+         type: File
+         outputBinding:
+           glob: $(inputs.output_file)
 
-To actually run tools, CWL requires a job description YAML (or JSON) file. Using the command line runner, an example would be:
+This can then be combined with the job description file below.
 
 .. code-block:: yaml
 
-    input_file: /Users/hartleym/projects/exploration/cwl/dummy.txt
+    input_file:
+      class: File
+      path: /Users/olssont/sandbox/cwl_v1/dummy.txt 
     output_file: dummycopy.txt
-    
-These files are generated dynamically by Jobarchitect's agent (``_analyse_by_ids``) at runtime.
+
+The job description files are generated dynamically by Jobarchitect's agent
+(``_analyse_by_ids``) at runtime.
+
+A different example using redirection (such that output is captured from stdout) is
+illustrated below:
+
+.. code-block:: yaml
+
+    cwlVersion: v1.0
+    class: CommandLineTool
+    inputs:
+      input_file:
+        type: File
+        inputBinding: { position: 1 }
+    baseCommand: shasum
+    outputs:
+      shasum: stdout
+    stdout: $(inputs.output_file)

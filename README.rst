@@ -53,9 +53,10 @@ To install the jobarchitect package.
 Use
 ---
 
-To generate bash scripts for data analysis, first create a job template, e.g.::
+To generate bash scripts for data analysis, first create a common workflow task
+description file. For example::
 
-    $ echo "echo {input_file} > {output_file}" > job.tmpl
+
 
 Then an example dataset::
 
@@ -73,20 +74,21 @@ Create an output directory::
 
 Then you can generate analysis run scripts with::
 
-    $ sketchjob job.tmpl example_dataset/ output/
+    sketchjob shasum.cwl exmaple_dataset output/
     #!/bin/bash
-    _analyse_by_ids  \
-      --program_template="echo {input_file} > {output_file}"  \
-      --input_dataset_path=example_dataset/  \
-      --output_root=output/  \
-      e4c73fa7c34b76499ac13fc5c335fa007e9c3e8f
+
+    _analyse_by_ids \
+      --cwl_tool_wrapper_path=shasum.cwl \
+      --input_dataset_path=example_dataset/ \
+      --output_root=output/ \
+      290d3f1a902c452ce1c184ed793b1d6b83b59164
 
 Try the script with::
 
-    $ sketchjob job.tmpl example_dataset/ output/ > run.sh
+    $ sketchjob shasum.cwl exmaple_dataset output/ > run.sh
     $ bash run.sh
-    $ cat output/my_file.txt
-    /Users/hartleym/scratch/example_dataset/data/my_file.txt
+    $ cat output/first_image.png
+    290d3f1a902c452ce1c184ed793b1d6b83b59164  /private/var/folders/hn/crprzwh12kj95plc9jjtxmq82nl2v3/T/tmp_pTfc6/stg02d730c7-17a2-4d06-a017-e59e14cb8885/first_image.png
 
 Working with Docker
 -------------------
@@ -106,17 +108,18 @@ By inspecting the script and associcated Docker file, you can get an idea of
 how to build Docker images that can be used with the jobarchitect Docker
 backend, e.g::
 
-    $ sketchjob job.tmpl example_dataset/ output/ --backend=docker --image-name=jicscicomp/jobarchitect
-
+    $ sketchjob sha1sum.cwl ~/junk/cotyledon_images ~/junk/output --backend=docker --image-name=jicscicomp/jobarchitect
     #!/bin/bash
+
     IMAGE_NAME=jicscicomp/jobarchitect
     docker run  \
       --rm  \
-      -v example_dataset/:/input_dataset:ro  \
-      -v output/:/output  \
+      -v /Users/olssont/junk/cotyledon_images:/input_dataset:ro  \
+      -v /Users/olssont/junk/output:/output  \
+      -v /Users/olssont/sandbox/cwl_v1/sha1sum.cwl:/tool.cwl:ro \
       $IMAGE_NAME  \
       _analyse_by_ids  \
-        --program_template "echo {input_file} > {output_file}"  \
+        --cwl_tool_wrapper_path=/tool.cwl  \
         --input_dataset_path=/input_dataset  \
         --output_root=/output  \
-        e4c73fa7c34b76499ac13fc5c335fa007e9c3e8f
+        290d3f1a902c452ce1c184ed793b1d6b83b59164 09648d19e11f0b20e5473594fc278afbede3c9a4
