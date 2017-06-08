@@ -36,6 +36,7 @@ def test_agent_cwl_job_generation():
     expected_input_path = path_from_hash(
         TEST_SAMPLE_DATASET,
         'c827a1a1a61e734828f525ae7715d9c5be591496')
+    expected_input = {"class": "File", "path": expected_input_path}
     # Expected output paths are RELATIVE paths to the current working directory
     # because CWL cannot cope with redirecting stdout to an absolute file path
     expected_output_path = output_path_from_hash(
@@ -48,7 +49,7 @@ def test_agent_cwl_job_generation():
 
     assert isinstance(cwl_job, dict)
 
-    assert cwl_job["input_file"] == expected_input_path
+    assert cwl_job["input_file"] == expected_input
     assert cwl_job["output_file"] == expected_output_path
 
 
