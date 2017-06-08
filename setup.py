@@ -13,7 +13,10 @@ setup(name="jobarchitect",
       author='Tjelvar Olsson',
       author_email='tjelvar.olsson@jic.ac.uk',
       url=url,
-      install_requires=["dtoolcore", "cwltool"],
+      install_requires=[
+        "dtoolcore",
+        "jinja2",
+        "cwltool"],
       entry_points={
           'console_scripts': ['_analyse_by_ids=jobarchitect.agent:cli',
                               'sketchjob=jobarchitect.sketchjob:cli']
