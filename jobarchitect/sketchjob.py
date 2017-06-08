@@ -128,9 +128,10 @@ def cli():
         default='bash')
     args = parser.parse_args()
 
-    if not os.path.isfile(args.job_description_file):
+    job_description_file = os.path.abspath(args.job_description_file)
+    if not os.path.isfile(job_description_file):
         parser.error("Job description file does not exist: {}".format(
-            args.job_description_file))
+            job_description_file))
 
     if not os.path.isdir(args.dataset_path):
         parser.error("Dataset path does not exist: {}".format(
@@ -141,7 +142,7 @@ def cli():
             parser.error("""You must specify an image to use a container based
 backend ({})""".format(args.backend))
 
-    jobs = list(sketchjob(args.job_description_file,
+    jobs = list(sketchjob(job_description_file,
                           args.dataset_path,
                           args.output_path,
                           backend_function_map[args.backend],
