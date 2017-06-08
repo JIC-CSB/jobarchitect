@@ -58,8 +58,9 @@ class Agent(object):
         output_file = output_path_from_hash(
             self.dataset_path, hash_str, '.')
         return dict(
-            input_file=input_file,
-            output_file=output_file)
+            input_file={"class": "File", "path": input_file},
+            output_file=output_file
+        )
 
 
 def analyse_by_identifiers(
