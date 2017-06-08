@@ -14,7 +14,6 @@ Added
 Changed
 ^^^^^^^
 
-- Now using CWL (Common Workflow Language) to specify program to be run on dataset.
 
 Deprecated
 ^^^^^^^^^^
@@ -30,6 +29,15 @@ Fixed
 
 Security
 ^^^^^^^^
+
+
+[0.4.0] - 2017-06-08
+--------------------
+
+Changed
+^^^^^^^
+
+- Now using CWL (Common Workflow Language) to specify program to be run on dataset.
 
 
 
