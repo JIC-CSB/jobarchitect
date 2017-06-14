@@ -16,6 +16,8 @@ class JobSpec(object):
 
         self._spec = dict()
         self._spec["tool_path"] = tool_path
+        self._spec["tool_dir"] = os.path.dirname(tool_path)
+        self._spec["tool_script"] = os.path.basename(tool_path)
         self._spec["dataset_path"] = os.path.abspath(dataset_path)
         self._spec["output_root"] = os.path.abspath(output_root)
         self._spec["hash_ids"] = " ".join([str(i) for i in hash_ids])

@@ -3,10 +3,10 @@ docker run  \
   --rm  \
   -v {{ dataset_path }}:/input_dataset:ro  \
   -v {{ output_root }}:/output  \
-  -v {{ tool_path }}:/tool.py:ro \
+  -v {{ tool_dir }}:/scripts:ro \
   $IMAGE_NAME  \
   _analyse_by_ids  \
-    --tool_path=/tool.py  \
+    --tool_path=/scripts/{{ tool_script }}  \
     --input_dataset_path=/input_dataset  \
     --output_root=/output  \
     {{ hash_ids -}}

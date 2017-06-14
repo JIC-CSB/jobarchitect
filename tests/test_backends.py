@@ -69,7 +69,9 @@ def test_generate_docker_job_single_line():
     from jobarchitect.backends import generate_docker_job, JobSpec
 
     parameters = dict(
-        tool_path='smart_tool.py',
+        tool_path='/scripts/smart_tool.py',
+        tool_script='smart_tool.py',
+        tool_dir='/scripts',
         dataset_path='/outside/container/data',
         output_root='/outside/container/output',
         hash_ids="1 2",
@@ -81,17 +83,17 @@ def test_generate_docker_job_single_line():
         "--rm",
         "-v {dataset_path}:/input_dataset:ro".format(**parameters),
         "-v {output_root}:/output".format(**parameters),
-        "-v {tool_path}:/tool.py:ro".format(**parameters),
+        "-v {tool_dir}:/scripts:ro".format(**parameters),
         "$IMAGE_NAME",
         "_analyse_by_ids",
-        "--tool_path=/tool.py".format(**parameters),
+        "--tool_path=/scripts/smart_tool.py".format(**parameters),
         "--input_dataset_path=/input_dataset".format(**parameters),
         "--output_root=/output".format(**parameters),
         "{hash_ids}".format(**parameters),
     ]
 
     input_job = JobSpec(
-        'smart_tool.py',
+        '/scripts/smart_tool.py',
         '/outside/container/data',
         '/outside/container/output',
         [1, 2],

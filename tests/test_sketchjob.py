@@ -262,6 +262,7 @@ def test_sketchjob_cli_with_docker_backend_with_imports(local_tmp_dir_fixture): 
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
+    print(script_calling_analyse_by_ids)
     out, err = p.communicate(script_calling_analyse_by_ids)
     assert err.decode('utf-8') == ""
 
