@@ -6,7 +6,7 @@ import subprocess
 
 from . import TEST_SAMPLE_DATASET
 from . import tmp_dir_fixture, local_tmp_dir_fixture  # NOQA
-from . import shasum_cwl_tool_wrapper, sha1sum_cwl_tool_wrapper
+from . import shasum_smart_tool
 
 
 def test_generate_jobspecs():
@@ -97,12 +97,9 @@ def test_sketchjob(tmp_dir_fixture):  # NOQA
     from jobarchitect.sketchjob import sketchjob
     from jobarchitect.backends import generate_bash_job
 
-    cwl_tool_wrapper_path = sha1sum_cwl_tool_wrapper
-    if sys.platform == "darwin":
-        cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     bash_lines = sketchjob(
-        cwl_tool_wrapper_path=cwl_tool_wrapper_path,
+        tool_path=shasum_smart_tool,
         dataset_path=TEST_SAMPLE_DATASET,
         output_root=tmp_dir_fixture,
         nchunks=1,
@@ -133,7 +130,7 @@ def test_sketchjob_with_docker_backend(local_tmp_dir_fixture):  # NOQA
     from jobarchitect.backends import generate_docker_job
 
     bash_lines = sketchjob(
-        cwl_tool_wrapper_path=sha1sum_cwl_tool_wrapper,
+        cwl_tool_wrapper_path=shasum_smart_tool,
         dataset_path=TEST_SAMPLE_DATASET,
         output_root=local_tmp_dir_fixture,
         nchunks=1,
@@ -160,10 +157,6 @@ def test_sketchjob_with_docker_backend(local_tmp_dir_fixture):  # NOQA
 
 
 def test_sketchjob_cli(tmp_dir_fixture):  # NOQA
-
-    cwl_tool_wrapper_path = sha1sum_cwl_tool_wrapper
-    if sys.platform == "darwin":
-        cwl_tool_wrapper_path = shasum_cwl_tool_wrapper
 
     # Run sketchjob and capture stdout.
     cmd = [

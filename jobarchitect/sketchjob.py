@@ -45,18 +45,18 @@ class JobSketcher(object):
 
     def __init__(
             self,
-            cwl_tool_wrapper_path,
+            tool_path,
             dataset_path,
             output_root,
             image_name=None
             ):
-        self.cwl_tool_wrapper_path = cwl_tool_wrapper_path
+        self.tool_path = tool_path
         self.dataset_path = dataset_path
         self.output_root = output_root
         self.image_name = image_name
 
     def _generate_jobspecs(self, nchunks):
-        for jobspec in generate_jobspecs(self.cwl_tool_wrapper_path,
+        for jobspec in generate_jobspecs(self.tool_path,
                                          self.dataset_path,
                                          self.output_root,
                                          nchunks,
@@ -74,11 +74,11 @@ class JobSketcher(object):
             yield backend(jobspec)
 
 
-def sketchjob(cwl_tool_wrapper_path, dataset_path, output_root,
+def sketchjob(tool_path, dataset_path, output_root,
               backend, nchunks, image_name=None):
     """Return list of jobs as strings.
 
-    :param cwl_tool_wrapper_path: path to CWL tool wrapper
+    :param tool_path: path to tool
     :param dataset_path: path to input dataset
     :param output_root: path to output root
     :param backend: backend function for generating job scripts
@@ -86,7 +86,7 @@ def sketchjob(cwl_tool_wrapper_path, dataset_path, output_root,
     :returns: generator yielding jobs as strings
     """
     jobsketcher = JobSketcher(
-        cwl_tool_wrapper_path=cwl_tool_wrapper_path,
+        tool_path=tool_path,
         dataset_path=dataset_path,
         output_root=output_root,
         image_name=image_name)

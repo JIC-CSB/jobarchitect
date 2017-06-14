@@ -8,7 +8,6 @@ import subprocess
 from jobarchitect.utils import (
     path_from_hash,
     output_path_from_hash,
-    tmp_dir_context,
 )
 
 
@@ -17,50 +16,25 @@ class Agent(object):
 
     def __init__(
         self,
-        cwl_tool_wrapper_path,
+        tool_path,
         dataset_path,
         output_root="/tmp"
     ):
-        self.cwl_tool_wrapper_path = os.path.abspath(cwl_tool_wrapper_path)
+        self.tool_path = os.path.abspath(tool_path)
         self.dataset_path = dataset_path
         self.output_root = output_root
 
-    def run_analysis(self, hash_str):
-        """Run the analysis on an item in the dataset.
 
-        :param hash_str: dataset item identifier as a hash string
-        """
-        cwl_job_description = self.create_cwl_job(hash_str)
-        with tmp_dir_context() as d:
-            job_filename = os.path.join(d, 'cwl_job.json')
-            with open(job_filename, 'w') as fh:
-                json.dump(cwl_job_description, fh)
-
-            # cwltool is not python3.5 compatible therefore we need to make
-            # sure it gets run with python2
-            which_cwltool_output = subprocess.check_output(
-                ['which', 'cwltool'])
-            cwltool_path = which_cwltool_output.decode('utf-8').strip()
-
-            command = ['python2', cwltool_path, '--quiet',
-                       self.cwl_tool_wrapper_path, job_filename]
-
-            subprocess.call(command, cwd=self.output_root)
-
-    def create_cwl_job(self, hash_str):
-        """Run the analysis on an item in the dataset.
-
-        :param hash_str: dataset item identifier as a hash string
-        :returns: dictionary defining job
-        """
-
-        input_file = path_from_hash(self.dataset_path, hash_str)
-        output_file = output_path_from_hash(
-            self.dataset_path, hash_str, '.')
-        return dict(
-            input_file={"class": "File", "path": input_file},
-            output_file=output_file
-        )
+    def run_tool_on_identifier(self, identifier):
+        """Run the tool on an item in the dataset."""
+        output_path = output_path_from_hash(
+            self.dataset_path, identifier, '.')
+        cmd = ["python",
+               self.tool_path,
+               "--dataset-path", self.dataset_path,
+               "--identifier", identifier,
+               "--output-path", output_path]
+        subprocess.call(cmd, cwd=self.output_root)
 
 
 def analyse_by_identifiers(
@@ -74,7 +48,7 @@ def analyse_by_identifiers(
     """
     agent = Agent(cwl_tool_wrapper_path, dataset_path, output_root)
     for i in identifiers:
-        agent.run_analysis(i)
+        agent.run_tool_on_identifier(i)
 
 
 def cli():

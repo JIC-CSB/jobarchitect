@@ -8,10 +8,9 @@ import pytest
 
 _HERE = os.path.dirname(__file__)
 TEST_SAMPLE_DATASET = os.path.join(_HERE, "data", "sample_data")
-CWL_TOOL_WRAPPERS = os.path.join(_HERE, "cwl_tool_wrappers")
+SAMPLE_SMART_TOOLS = os.path.join(_HERE, "sample_smart_tools")
 
-shasum_cwl_tool_wrapper = os.path.join(CWL_TOOL_WRAPPERS, 'shasum.cwl')
-sha1sum_cwl_tool_wrapper = os.path.join(CWL_TOOL_WRAPPERS, 'sha1sum.cwl')
+shasum_smart_tool = os.path.join(SAMPLE_SMART_TOOLS, "shasum.py")
 
 
 @pytest.fixture
