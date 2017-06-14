@@ -15,8 +15,7 @@ setup(name="jobarchitect",
       url=url,
       install_requires=[
         "dtoolcore",
-        "jinja2",
-        "cwltool"],
+        "jinja2"],
       entry_points={
           'console_scripts': ['_analyse_by_ids=jobarchitect.agent:cli',
                               'sketchjob=jobarchitect.sketchjob:cli']
