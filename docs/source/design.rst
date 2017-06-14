@@ -96,8 +96,17 @@ i.e.
 
 .. code-block:: none
 
-    python scripts/analysis.py path/to/dataset identifier_hash output_root
+    python scripts/analysis.py  \
+      --dataset-path=path/to/dataset  \
+      --identifier=identifier_hash  \
+      --output-path=output_root
 
 This removes the need for CWL.  We can therefore take the pragmatic decision to
 trade the flexibility offered by CWL for simplicity. If we need CWL in the future
 we can work off the groundwork put into the 0.4.0 release.
+
+.. note:: In the example above we do not use positional arguments.
+          This is a design decision to make it easier to extend the tool in the
+          future whilst remaining backwards compatible. Although this makes the
+          tool a bit more difficult to run, we are not expecting to run this
+          directly, it will be run programatically.
