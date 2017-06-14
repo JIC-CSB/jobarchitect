@@ -11,6 +11,7 @@ TEST_SAMPLE_DATASET = os.path.join(_HERE, "data", "sample_data")
 SAMPLE_SMART_TOOLS = os.path.join(_HERE, "sample_smart_tools")
 
 shasum_smart_tool = os.path.join(SAMPLE_SMART_TOOLS, "shasum.py")
+shasum_smart_import_tool = os.path.join(SAMPLE_SMART_TOOLS, "shasum_import.py")
 
 
 @pytest.fixture
