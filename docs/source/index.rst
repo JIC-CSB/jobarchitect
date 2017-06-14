@@ -9,5 +9,6 @@ Content
 
    README
    cwl
+   design
    api
    CHANGELOG
