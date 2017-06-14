@@ -110,3 +110,6 @@ we can work off the groundwork put into the 0.4.0 release.
           future whilst remaining backwards compatible. Although this makes the
           tool a bit more difficult to run, we are not expecting to run this
           directly, it will be run programatically.
+
+Removing CWL backend also means that we do not yet need to implement the second
+layer of abstraction (``agent.py``).
