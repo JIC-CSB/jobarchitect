@@ -9,15 +9,6 @@ from . import tmp_dir_fixture  # NOQA
 from . import TEST_SAMPLE_DATASET
 
 
-def test_tmp_dir_context():
-    from jobarchitect.utils import tmp_dir_context
-
-    with tmp_dir_context() as d:
-        assert os.path.isdir(d)
-
-    assert not os.path.isdir(d)
-
-
 def test_mkdir_parents(tmp_dir_fixture):  # NOQA
     from jobarchitect.utils import mkdir_parents
 
