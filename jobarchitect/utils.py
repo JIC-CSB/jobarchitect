@@ -9,16 +9,6 @@ import contextlib
 from dtoolcore import DataSet
 
 
-@contextlib.contextmanager
-def tmp_dir_context():
-    d = tempfile.mkdtemp()
-
-    try:
-        yield d
-    finally:
-        shutil.rmtree(d)
-
-
 def mkdir_parents(path):
     """Create the given directory path.
 
