@@ -89,3 +89,15 @@ Or in the case of a custom script:
       --input_dataset_path=example_dataset/ \
       --output_root=output/ \
       290d3f1a902c452ce1c184ed793b1d6b83b59164
+
+Now that our tools make use of datasets we can write "smart" tools.
+The "smart" tools will work on datasets in a standardised fashion,
+i.e.
+
+.. code-block:: none
+
+    python scripts/analysis.py path/to/dataset identifier_hash output_root
+
+This removes the need for CWL.  We can therefore take the pragmatic decision to
+trade the flexibility offered by CWL for simplicity. If we need CWL in the future
+we can work off the groundwork put into the 0.4.0 release.
