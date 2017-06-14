@@ -11,11 +11,11 @@ ENV = Environment(loader=PackageLoader('jobarchitect', 'templates'),
 class JobSpec(object):
     """Job specification class."""
 
-    def __init__(self, cwl_tool_wrapper_path, dataset_path,
+    def __init__(self, tool_path, dataset_path,
                  output_root, hash_ids, image_name=None):
 
         self._spec = dict()
-        self._spec["cwl_tool_wrapper_path"] = cwl_tool_wrapper_path
+        self._spec["tool_path"] = tool_path
         self._spec["dataset_path"] = os.path.abspath(dataset_path)
         self._spec["output_root"] = os.path.abspath(output_root)
         self._spec["hash_ids"] = " ".join([str(i) for i in hash_ids])
@@ -29,9 +29,9 @@ class JobSpec(object):
         return self._spec.keys()
 
     @property
-    def cwl_tool_wrapper_path(self):
-        """Return the path to the CWL tool wrapper."""
-        return self._spec["cwl_tool_wrapper_path"]
+    def tool_path(self):
+        """Return the path to the tool."""
+        return self._spec["tool_path"]
 
     @property
     def dataset_path(self):

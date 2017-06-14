@@ -14,7 +14,7 @@ from jobarchitect.backends import (
 
 
 def generate_jobspecs(
-        cwl_tool_wrapper_path,
+        tool_path,
         dataset_path,
         output_root,
         nchunks,
@@ -22,7 +22,7 @@ def generate_jobspecs(
         ):
     """Return generator yielding instances of :class:`jobarchitect.JobSec`.
 
-    :param cwl_tool_wrapper_path: path to CWL tool wrapper
+    :param tool_path: path to tool
     :param dataset_path: path to input dataset
     :param output_root: path to output root
     :param nchunks: number of chunks the job should be split into
@@ -32,7 +32,7 @@ def generate_jobspecs(
     for file_entry_list in split_dataset(dataset_path, nchunks):
         identifiers = [entry['hash'] for entry in file_entry_list]
         yield JobSpec(
-            cwl_tool_wrapper_path,
+            tool_path,
             dataset_path,
             output_root,
             identifiers,

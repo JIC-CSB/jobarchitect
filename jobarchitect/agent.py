@@ -38,15 +38,15 @@ class Agent(object):
 
 
 def analyse_by_identifiers(
-        cwl_tool_wrapper_path, dataset_path, output_root, identifiers):
+        tool_path, dataset_path, output_root, identifiers):
     """Run analysis on identifiers.
 
-    :param cwl_tool_wrapper_path: path to cwl tool wrapper
+    :param tool_path: path to tool
     :param dataset_path: path to input dataset
     :param output_root: path to output root
     :identifiers: list of identifiers
     """
-    agent = Agent(cwl_tool_wrapper_path, dataset_path, output_root)
+    agent = Agent(tool_path, dataset_path, output_root)
     for i in identifiers:
         agent.run_tool_on_identifier(i)
 
@@ -56,7 +56,7 @@ def cli():
 
     parser = argparse.ArgumentParser(description=__doc__)
 
-    parser.add_argument('--cwl_tool_wrapper_path', required=True)
+    parser.add_argument('--tool_path', required=True)
     parser.add_argument('--input_dataset_path', required=True)
     parser.add_argument('--output_root', required=True)
     parser.add_argument('identifiers', nargs=argparse.REMAINDER)
@@ -64,7 +64,7 @@ def cli():
     args = parser.parse_args()
 
     analyse_by_identifiers(
-        args.cwl_tool_wrapper_path,
+        args.tool_path,
         args.input_dataset_path,
         args.output_root,
         args.identifiers)

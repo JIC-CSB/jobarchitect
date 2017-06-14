@@ -13,26 +13,26 @@ def test_generate_jobspecs():
     from jobarchitect.backends import JobSpec
     from jobarchitect.sketchjob import generate_jobspecs
     jobspecs = list(generate_jobspecs(
-        cwl_tool_wrapper_path="shasum.cwl",
+        tool_path="smart_tool.py",
         dataset_path=TEST_SAMPLE_DATASET,
         output_root="/tmp",
         nchunks=1))
     assert len(jobspecs) == 1
     assert isinstance(jobspecs[0], JobSpec)
-    assert jobspecs[0].cwl_tool_wrapper_path == "shasum.cwl"
+    assert jobspecs[0].tool_path == "smart_tool.py"
     assert jobspecs[0].dataset_path == TEST_SAMPLE_DATASET
     assert jobspecs[0].output_root == "/tmp"
     assert len(jobspecs[0].hash_ids.split()) == 7
 
     jobspecs = list(generate_jobspecs(
-        cwl_tool_wrapper_path="shasum.cwl",
+        tool_path="smart_tool.py",
         dataset_path=TEST_SAMPLE_DATASET,
         output_root="/tmp",
         nchunks=2))
     assert len(jobspecs) == 2
 
     jobspecs = list(generate_jobspecs(
-        cwl_tool_wrapper_path="shasum.cwl",
+        tool_path="smart_tool.py",
         dataset_path=TEST_SAMPLE_DATASET,
         output_root="/tmp",
         nchunks=7))
@@ -46,11 +46,11 @@ def test_jobsketcher_initialisation():
     from jobarchitect.sketchjob import JobSketcher
 
     jobsketcher = JobSketcher(
-        cwl_tool_wrapper_path='shasum.cwl',
+        tool_path='smart_tool.py',
         dataset_path='/path/to/dataset',
         output_root='/tmp/output')
 
-    assert jobsketcher.cwl_tool_wrapper_path == 'shasum.cwl'
+    assert jobsketcher.tool_path == 'smart_tool.py'
     assert jobsketcher.dataset_path == '/path/to/dataset'
     assert jobsketcher.output_root == '/tmp/output'
 
@@ -59,7 +59,7 @@ def test_jobsketcher_generate_jobspecs():
     from jobarchitect.sketchjob import JobSketcher
 
     jobsketcher = JobSketcher(
-        cwl_tool_wrapper_path='shasum.cwl',
+        tool_path='smart_tool.py',
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output')
 
@@ -74,14 +74,14 @@ def test_jobsketcher_sketch():
     from jobarchitect.backends import generate_bash_job
 
     jobsketcher = JobSketcher(
-        cwl_tool_wrapper_path='shasum.cwl',
+        tool_path='smart_tool.py',
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output')
 
     bash_lines = list(jobsketcher.sketch(backend=generate_bash_job, nchunks=1))
 
     jobspec_generator = generate_jobspecs(
-        cwl_tool_wrapper_path='shasum.cwl',
+        tool_path='smart_tool.py',
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output',
         nchunks=1)
@@ -96,7 +96,6 @@ def test_jobsketcher_sketch():
 def test_sketchjob(tmp_dir_fixture):  # NOQA
     from jobarchitect.sketchjob import sketchjob
     from jobarchitect.backends import generate_bash_job
-
 
     bash_lines = sketchjob(
         tool_path=shasum_smart_tool,
@@ -130,7 +129,7 @@ def test_sketchjob_with_docker_backend(local_tmp_dir_fixture):  # NOQA
     from jobarchitect.backends import generate_docker_job
 
     bash_lines = sketchjob(
-        cwl_tool_wrapper_path=shasum_smart_tool,
+        tool_path=shasum_smart_tool,
         dataset_path=TEST_SAMPLE_DATASET,
         output_root=local_tmp_dir_fixture,
         nchunks=1,
@@ -161,7 +160,7 @@ def test_sketchjob_cli(tmp_dir_fixture):  # NOQA
     # Run sketchjob and capture stdout.
     cmd = [
         "sketchjob",
-        cwl_tool_wrapper_path,
+        shasum_smart_tool,
         TEST_SAMPLE_DATASET,
         tmp_dir_fixture,
         # "--nchunks=1",  # Default is 1.
@@ -177,6 +176,7 @@ def test_sketchjob_cli(tmp_dir_fixture):  # NOQA
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
+    print script_calling_analyse_by_ids
     out, err = p.communicate(script_calling_analyse_by_ids)
     assert err.decode('utf-8') == ""
 
@@ -201,7 +201,7 @@ def test_sketchjob_cli_with_docker_backend(local_tmp_dir_fixture):  # NOQA
     # Run sketchjob and capture stdout.
     cmd = [
         "sketchjob",
-        sha1sum_cwl_tool_wrapper,
+        shasum_smart_tool,
         TEST_SAMPLE_DATASET,
         local_tmp_dir_fixture,
         # "--nchunks=1",  # Default is 1.
