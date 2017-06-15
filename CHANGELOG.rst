@@ -15,6 +15,7 @@ Added
 Changed
 ^^^^^^^
 
+- Singularity template
 
 
 Deprecated
@@ -27,6 +28,8 @@ Removed
 
 Fixed
 ^^^^^
+
+- Naming of ``sketchjob`` input argument
 
 
 Security
