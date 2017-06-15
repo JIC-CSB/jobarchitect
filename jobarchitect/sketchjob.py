@@ -96,7 +96,7 @@ def sketchjob(tool_path, dataset_path, output_root,
 
 def cli():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("job_description_file", help="Template describing job")
+    parser.add_argument("tool_path", help="Path to 'smart' tool")
     parser.add_argument("dataset_path", help="Path to dataset to be analysed")
     parser.add_argument(
         "output_path",
@@ -128,10 +128,10 @@ def cli():
         default='bash')
     args = parser.parse_args()
 
-    job_description_file = os.path.abspath(args.job_description_file)
-    if not os.path.isfile(job_description_file):
+    tool_path = os.path.abspath(args.tool_path)
+    if not os.path.isfile(tool_path):
         parser.error("Job description file does not exist: {}".format(
-            job_description_file))
+            tool_path))
 
     if not os.path.isdir(args.dataset_path):
         parser.error("Dataset path does not exist: {}".format(
@@ -142,7 +142,7 @@ def cli():
             parser.error("""You must specify an image to use a container based
 backend ({})""".format(args.backend))
 
-    jobs = list(sketchjob(job_description_file,
+    jobs = list(sketchjob(tool_path,
                           args.dataset_path,
                           args.output_path,
                           backend_function_map[args.backend],
