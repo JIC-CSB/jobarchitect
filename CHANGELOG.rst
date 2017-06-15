@@ -4,6 +4,7 @@ CHANGELOG
 This project uses `semantic versioning <http://semver.org/>`_.
 This change log uses principles from `keep a changelog <http://keepachangelog.com/>`_.
 
+
 [Unreleased]
 ------------
 
@@ -13,6 +14,7 @@ Added
 
 Changed
 ^^^^^^^
+
 
 
 Deprecated
@@ -29,6 +31,42 @@ Fixed
 
 Security
 ^^^^^^^^
+
+
+[0.5.0] - 2017-06-15
+--------------------
+
+Added
+^^^^^
+
+- Ability to access file level metadata from dataset items when running
+  a Python analysis script
+
+
+Changed
+^^^^^^^
+
+- Tools now need to comply with a specific command line interface to
+  be able to run using scripts produced by ``sketchjob``. The command
+  line interface of such "smart" scripts should have no positional arguments
+  and has three required named arguments: ``--dataset-path``, ``-identifier``,
+  and ``--output-path``. Furthermore, the such "smart" analysis scripts
+  should only work on one item in a dataset as it is the responsibility of
+  ``sketchjob`` and the jobarchitect ``agent`` to split the dataset into
+  individual jobs.
+- For jobs that do not adhere to the command line interface above one will
+  have to write thin Python wrappers, for examples have a look at the scripts
+  in ``tests/sample_smart_tools/``
+- Requiring use of "smart" tools removes the need to make use of CWL, so it's
+  support has been removed
+- See the :doc:`design` document for more details about the thought process
+  that led to this redesign.
+
+
+Removed
+^^^^^^^
+
+- CWL support
 
 
 [0.4.0] - 2017-06-08
