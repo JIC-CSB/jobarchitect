@@ -8,6 +8,7 @@ import subprocess
 from jobarchitect.utils import (
     path_from_hash,
     output_path_from_hash,
+    mkdir_parents
 )
 
 
@@ -28,13 +29,14 @@ class Agent(object):
     def run_tool_on_identifier(self, identifier):
         """Run the tool on an item in the dataset."""
         output_path = output_path_from_hash(
-            self.dataset_path, identifier, '.')
+            self.dataset_path, identifier, self.output_root)
+        mkdir_parents(output_path)
         cmd = ["python",
                self.tool_path,
                "--dataset-path", self.dataset_path,
                "--identifier", identifier,
-               "--output-path", output_path]
-        subprocess.call(cmd, cwd=self.output_root)
+               "--output-directory", output_path]
+        subprocess.call(cmd)
 
 
 def analyse_by_identifiers(

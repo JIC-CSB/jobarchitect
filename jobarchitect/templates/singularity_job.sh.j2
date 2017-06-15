@@ -1,11 +1,8 @@
 IMAGE_NAME={{ image_name }}
 singularity exec  \
-  -B {{ dataset_path }}:/input_dataset  \
-  -B {{ output_root }}:/output  \
-  -c \
   $IMAGE_NAME  \
   _analyse_by_ids  \
-    --tool_path {{ tool_path }}  \
-    --input_dataset_path=/input_dataset  \
-    --output_root=/output  \
+    --tool_path /scripts/{{ tool_script }}  \
+    --input_dataset_path={{ dataset_path }}  \
+    --output_root={{ output_root }}  \
     {{ hash_ids -}}

@@ -112,7 +112,7 @@ def test_generate_singularity_job_single_line():
     from jobarchitect.backends import generate_singularity_job, JobSpec
 
     parameters = dict(
-        tool_path='smart_tool.py',
+        tool_script='smart_tool.py',
         dataset_path='/outside/container/data',
         output_root='/outside/container/output',
         hash_ids="1 2",
@@ -121,14 +121,11 @@ def test_generate_singularity_job_single_line():
     expected_starts = [
         "IMAGE_NAME={image_name}".format(**parameters),
         "singularity exec",
-        "-B {dataset_path}:/input_dataset".format(**parameters),
-        "-B {output_root}:/output".format(**parameters),
-        "-c",
         "$IMAGE_NAME",
         "_analyse_by_ids",
-        "--tool_path {tool_path}".format(**parameters),
-        "--input_dataset_path=/input_dataset".format(**parameters),
-        "--output_root=/output".format(**parameters),
+        "--tool_path /scripts/{tool_script}".format(**parameters),
+        "--input_dataset_path={dataset_path}".format(**parameters),
+        "--output_root={output_root}".format(**parameters),
         "{hash_ids}".format(**parameters),
     ]
 

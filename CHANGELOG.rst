@@ -11,10 +11,16 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
+- Agent now creates the output directory that it will pass to the "smart" tool
+  via the ``--output-directory``
+
 
 Changed
 ^^^^^^^
 
+- "Smart" tool interface parameter name changed from
+  ``--output-path`` to ``--output-directory``
+- Singularity template
 
 
 Deprecated
@@ -27,6 +33,8 @@ Removed
 
 Fixed
 ^^^^^
+
+- Naming of ``sketchjob`` input argument
 
 
 Security

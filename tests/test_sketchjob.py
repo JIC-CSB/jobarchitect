@@ -106,8 +106,13 @@ def test_sketchjob(tmp_dir_fixture):  # NOQA
         backend=generate_bash_job)
 
     for line in bash_lines:
-        p = subprocess.Popen(['bash'], stdin=subprocess.PIPE)
+        p = subprocess.Popen(
+            ['bash'],
+            stdin=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
         out, err = p.communicate(line.encode())
+        assert err.decode('utf-8') == ""
 
     from dtoolcore import DataSet
     from jobarchitect.utils import output_path_from_hash
@@ -117,8 +122,10 @@ def test_sketchjob(tmp_dir_fixture):  # NOQA
             TEST_SAMPLE_DATASET,
             entry["hash"],
             tmp_dir_fixture)
-        assert os.path.isfile(output_path)
-        with open(output_path, "r") as fh:
+        assert os.path.isdir(output_path)
+        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        assert os.path.isfile(output_file)
+        with open(output_file, "r") as fh:
             contents = fh.read()
         hash_from_output = contents.strip().split()[0]
         assert hash_from_output == entry["hash"]
@@ -149,8 +156,10 @@ def test_sketchjob_with_docker_backend(local_tmp_dir_fixture):  # NOQA
             TEST_SAMPLE_DATASET,
             entry["hash"],
             local_tmp_dir_fixture)
-        assert os.path.isfile(output_path)
-        with open(output_path, "r") as fh:
+        assert os.path.isdir(output_path)
+        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        assert os.path.isfile(output_file)
+        with open(output_file, "r") as fh:
             contents = fh.read()
         hash_from_output = contents.strip().split()[0]
         assert hash_from_output == entry["hash"]
@@ -190,8 +199,10 @@ def test_sketchjob_cli(tmp_dir_fixture):  # NOQA
             TEST_SAMPLE_DATASET,
             entry["hash"],
             tmp_dir_fixture)
-        assert os.path.isfile(output_path)
-        with open(output_path, "r") as fh:
+        assert os.path.isdir(output_path)
+        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        assert os.path.isfile(output_file)
+        with open(output_file, "r") as fh:
             contents = fh.read()
         hash_from_output = contents.strip().split()[0]
         assert hash_from_output == entry["hash"]
@@ -232,8 +243,10 @@ def test_sketchjob_cli_with_docker_backend(local_tmp_dir_fixture):  # NOQA
             TEST_SAMPLE_DATASET,
             entry["hash"],
             local_tmp_dir_fixture)
-        assert os.path.isfile(output_path)
-        with open(output_path, "r") as fh:
+        assert os.path.isdir(output_path)
+        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        assert os.path.isfile(output_file)
+        with open(output_file, "r") as fh:
             contents = fh.read()
         hash_from_output = contents.strip().split()[0]
         assert hash_from_output == entry["hash"]
@@ -275,8 +288,10 @@ def test_sketchjob_cli_with_docker_backend_with_imports(local_tmp_dir_fixture): 
             TEST_SAMPLE_DATASET,
             entry["hash"],
             local_tmp_dir_fixture)
-        assert os.path.isfile(output_path)
-        with open(output_path, "r") as fh:
+        assert os.path.isdir(output_path)
+        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        assert os.path.isfile(output_file)
+        with open(output_file, "r") as fh:
             contents = fh.read()
         hash_from_output = contents.strip().split()[0]
         assert hash_from_output == entry["hash"]
