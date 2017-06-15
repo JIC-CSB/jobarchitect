@@ -49,18 +49,18 @@ Changed
 - Tools now need to comply with a specific command line interface to
   be able to run using scripts produced by ``sketchjob``. The command
   line interface of such "smart" scripts should have no positional arguments
-  and has three required named arguments: ``--dataset-path``, ``-identifier``,
-  and ``--output-path``. Furthermore, the such "smart" analysis scripts
+  and has three required named arguments: ``--dataset-path``, ``--identifier``,
+  and ``--output-path``. Furthermore, such "smart" analysis scripts
   should only work on one item in a dataset as it is the responsibility of
   ``sketchjob`` and the jobarchitect ``agent`` to split the dataset into
   individual jobs.
 - For jobs that do not adhere to the command line interface above one will
   have to write thin Python wrappers, for examples have a look at the scripts
   in ``tests/sample_smart_tools/``
-- Requiring use of "smart" tools removes the need to make use of CWL, so it's
+- Requiring the use of "smart" tools removes the need to make use of CWL, so its
   support has been removed
 - See the :doc:`design` document for more details about the thought process
-  that led to this redesign.
+  that led to this redesign
 
 
 Removed
