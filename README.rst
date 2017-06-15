@@ -53,14 +53,17 @@ To install the jobarchitect package.
 Use
 ---
 
-To generate bash scripts for data analysis, first create a common workflow task
-description file. For example::
+The ``jobarchitect`` tool only works with "smart" tools.
+A "smart" tool is a tool that understands `dtoolcore <https://github.com/JIC-CSB/dtoolcore>`_
+datasets, has no positional command line arguments and supports the
+named arguments ``--dataset-path``, ``--identifier``, ``--output-directory``.
+The tool should only process the dataset item specified by the identifier
+and write all output to the specified output directory.
 
+A dtool dataset can be created using `dtool <https://github.com/JIC-CSB/dtool>`_.
+Below is some sample::
 
-
-Then an example dataset::
-
-    $ datatool new dataset
+    $ dtool new dataset
     project_name [project_name]:
     dataset_name [dataset_name]: example_dataset
     ...
@@ -74,18 +77,18 @@ Create an output directory::
 
 Then you can generate analysis run scripts with::
 
-    sketchjob shasum.cwl exmaple_dataset output/
+    $ sketchjob my_smart_tool.py exmaple_dataset output/
     #!/bin/bash
 
     _analyse_by_ids \
-      --cwl_tool_wrapper_path=shasum.cwl \
+      --tool_path=my_smart_tool.py \
       --input_dataset_path=example_dataset/ \
       --output_root=output/ \
       290d3f1a902c452ce1c184ed793b1d6b83b59164
 
 Try the script with::
 
-    $ sketchjob shasum.cwl exmaple_dataset output/ > run.sh
+    $ sketchjob my_smart_tool.py exmaple_dataset output/ > run.sh
     $ bash run.sh
     $ cat output/first_image.png
     290d3f1a902c452ce1c184ed793b1d6b83b59164  /private/var/folders/hn/crprzwh12kj95plc9jjtxmq82nl2v3/T/tmp_pTfc6/stg02d730c7-17a2-4d06-a017-e59e14cb8885/first_image.png
@@ -108,7 +111,7 @@ By inspecting the script and associcated Docker file, you can get an idea of
 how to build Docker images that can be used with the jobarchitect Docker
 backend, e.g::
 
-    $ sketchjob sha1sum.cwl ~/junk/cotyledon_images ~/junk/output --backend=docker --image-name=jicscicomp/jobarchitect
+    $ sketchjob scripts/my_smart_tool.py ~/junk/cotyledon_images ~/junk/output --backend=docker --image-name=jicscicomp/jobarchitect
     #!/bin/bash
 
     IMAGE_NAME=jicscicomp/jobarchitect
@@ -116,10 +119,10 @@ backend, e.g::
       --rm  \
       -v /Users/olssont/junk/cotyledon_images:/input_dataset:ro  \
       -v /Users/olssont/junk/output:/output  \
-      -v /Users/olssont/sandbox/cwl_v1/sha1sum.cwl:/tool.cwl:ro \
+      -v /Users/olssont/sandbox/scripts:/scripts:ro \
       $IMAGE_NAME  \
       _analyse_by_ids  \
-        --cwl_tool_wrapper_path=/tool.cwl  \
+        --tool_path=/scripts/my_smart_tool.py \
         --input_dataset_path=/input_dataset  \
         --output_root=/output  \
         290d3f1a902c452ce1c184ed793b1d6b83b59164 09648d19e11f0b20e5473594fc278afbede3c9a4
