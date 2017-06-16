@@ -6,7 +6,6 @@ import argparse
 import subprocess
 
 from jobarchitect.utils import (
-    path_from_hash,
     output_path_from_hash,
     mkdir_parents
 )
