@@ -2,9 +2,6 @@
 
 import os
 import errno
-import shutil
-import tempfile
-import contextlib
 
 from dtoolcore import DataSet
 

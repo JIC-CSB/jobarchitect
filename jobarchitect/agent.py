@@ -1,7 +1,6 @@
 """Jobarchitect agent."""
 
 import os
-import json
 import argparse
 import subprocess
 
