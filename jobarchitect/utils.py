@@ -71,8 +71,5 @@ def output_path_from_hash(dataset_path, hash_str, output_root):
 
     dataset_path = os.path.abspath(dataset_path)
     dataset = DataSet.from_path(dataset_path)
-
-    for item in dataset.manifest["file_list"]:
-        if item["hash"] == hash_str:
-            return os.path.join(output_root, item["path"])
-    raise(KeyError("File hash not in dataset"))
+    item = dataset.item_from_identifier(hash_str)
+    return os.path.join(output_root, item["path"])
