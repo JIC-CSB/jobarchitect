@@ -18,7 +18,8 @@ def generate_jobspecs(
         dataset_path,
         output_root,
         nchunks,
-        image_name=None
+        image_name=None,
+        identifiers=None
         ):
     """Return generator yielding instances of :class:`jobarchitect.JobSec`.
 
@@ -30,7 +31,8 @@ def generate_jobspecs(
     :returns: generator yielding instances of :class:`jobarchitect.JobSec`
     """
     for file_entry_list in split_dataset(dataset_path, nchunks):
-        identifiers = [entry['hash'] for entry in file_entry_list]
+        if not identifiers:
+            identifiers = [entry['hash'] for entry in file_entry_list]
         yield JobSpec(
             tool_path,
             dataset_path,
@@ -48,19 +50,22 @@ class JobSketcher(object):
             tool_path,
             dataset_path,
             output_root,
-            image_name=None
+            image_name=None,
+            identifiers=None
             ):
         self.tool_path = tool_path
         self.dataset_path = dataset_path
         self.output_root = output_root
         self.image_name = image_name
+        self.identifiers = identifiers
 
     def _generate_jobspecs(self, nchunks):
         for jobspec in generate_jobspecs(self.tool_path,
                                          self.dataset_path,
                                          self.output_root,
                                          nchunks,
-                                         image_name=self.image_name):
+                                         image_name=self.image_name,
+                                         identifiers=self.identifiers):
             yield jobspec
 
     def sketch(self, backend, nchunks):
@@ -75,7 +80,8 @@ class JobSketcher(object):
 
 
 def sketchjob(tool_path, dataset_path, output_root,
-              backend, nchunks, image_name=None):
+              backend, nchunks, image_name=None,
+              identifiers=None):
     """Return list of jobs as strings.
 
     :param tool_path: path to tool
@@ -89,7 +95,8 @@ def sketchjob(tool_path, dataset_path, output_root,
         tool_path=tool_path,
         dataset_path=dataset_path,
         output_root=output_root,
-        image_name=image_name)
+        image_name=image_name,
+        identifiers=identifiers)
     for job in jobsketcher.sketch(backend, nchunks):
         yield job
 
@@ -126,6 +133,11 @@ def cli():
         "--wrapper-script",
         choices=wrapper_script_map.keys(),
         default='bash')
+    parser.add_argument(
+        "--identifiers",
+        default=None,
+        help="Comma separated list of identifiers to generate jobs for. \
+              If not supplied, use all identifiers.")
     args = parser.parse_args()
 
     tool_path = os.path.abspath(args.tool_path)
@@ -147,7 +159,8 @@ backend ({})""".format(args.backend))
                           args.output_path,
                           backend_function_map[args.backend],
                           args.nchunks,
-                          args.image_name))
+                          args.image_name,
+                          args.identifiers.split(',')))
     script = render_script(
         wrapper_script_map[args.wrapper_script],
         {"jobs": jobs, "partition": "rg-mh", "jobmem": 4000})
