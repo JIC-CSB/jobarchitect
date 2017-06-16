@@ -3,6 +3,7 @@ import argparse
 
 from dtoolcore import DataSet
 
+
 def main(dataset_path, identifier, output_directory):
     dataset = DataSet.from_path(dataset_path)
     fpath = dataset.abspath_from_identifier(identifier)
@@ -10,6 +11,7 @@ def main(dataset_path, identifier, output_directory):
     with open(output_fpath, "w") as fh:
         shasum_string = "{} {}\n".format(identifier, fpath)
         fh.write(shasum_string)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

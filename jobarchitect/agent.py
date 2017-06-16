@@ -23,7 +23,6 @@ class Agent(object):
         self.dataset_path = dataset_path
         self.output_root = output_root
 
-
     def run_tool_on_identifier(self, identifier):
         """Run the tool on an item in the dataset."""
         output_path = output_path_from_hash(
