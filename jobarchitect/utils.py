@@ -69,6 +69,29 @@ def split_dataset(dataset_path, nchunks):
         yield chunk
 
 
+def split_iterable(iterable, nchunks):
+    """Return generator yielding lists derived from the iterable.
+
+    :param iterable: an interable
+    :param nchunks: number of chunks the iterable should be split into
+    :returns: generator yielding lists from the iterable
+    """
+
+    num_items = len(iterable)
+    chunk_size = num_items // nchunks
+    left_over_items = num_items % nchunks
+    index = 0
+    for n in range(nchunks, 0, -1):
+        chunk = []
+        for i in range(chunk_size):
+            chunk.append(iterable[index])
+            index += 1
+        if n <= left_over_items:
+            chunk.append(iterable[index])
+            index += 1
+        yield chunk
+
+
 def output_path_from_hash(dataset_path, hash_str, output_root):
     """Return absolute output path for a dataset item.
 

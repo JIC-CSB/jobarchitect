@@ -3,7 +3,9 @@
 import os
 import argparse
 
-from jobarchitect.utils import split_dataset
+from dtoolcore import DataSet
+
+from jobarchitect.utils import split_dataset, split_iterable
 from jobarchitect.backends import (
     JobSpec,
     generate_bash_job,
@@ -30,14 +32,18 @@ def generate_jobspecs(
     :param image_name: container image name
     :returns: generator yielding instances of :class:`jobarchitect.JobSec`
     """
-    for file_entry_list in split_dataset(dataset_path, nchunks):
-        if not identifiers:
-            identifiers = [entry['hash'] for entry in file_entry_list]
+    dataset = DataSet.from_path(dataset_path)
+
+    if not identifiers:
+        identifiers = dataset.identifiers
+
+    for identifiers_chunk in split_iterable(identifiers, nchunks):
+
         yield JobSpec(
             tool_path,
             dataset_path,
             output_root,
-            identifiers,
+            identifiers_chunk,
             image_name=image_name
         )
 
@@ -154,13 +160,18 @@ def cli():
             parser.error("""You must specify an image to use a container based
 backend ({})""".format(args.backend))
 
+    if args.identifiers is not None:
+        identifiers = args.identifiers.split(',')
+    else:
+        identifiers = None
+
     jobs = list(sketchjob(tool_path,
                           args.dataset_path,
                           args.output_path,
                           backend_function_map[args.backend],
                           args.nchunks,
                           args.image_name,
-                          args.identifiers.split(',')))
+                          identifiers))
     script = render_script(
         wrapper_script_map[args.wrapper_script],
         {"jobs": jobs, "partition": "rg-mh", "jobmem": 4000})

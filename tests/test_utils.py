@@ -108,6 +108,57 @@ def test_split_dataset():
                               file_list[6]]
 
 
+def test_split_iterable():
+    from jobarchitect.utils import split_iterable
+
+    iterable = [1, 2, 3, 4, 5, 6, 7]
+
+    tmp_iter = split_iterable(iterable, 7)
+    assert next(tmp_iter) == [1]
+    assert next(tmp_iter) == [2]
+    assert next(tmp_iter) == [3]
+    assert next(tmp_iter) == [4]
+    assert next(tmp_iter) == [5]
+    assert next(tmp_iter) == [6]
+    assert next(tmp_iter) == [7]
+
+    tmp_iter = split_iterable(iterable, 6)
+    assert next(tmp_iter) == [iterable[0]]
+    assert next(tmp_iter) == [iterable[1]]
+    assert next(tmp_iter) == [iterable[2]]
+    assert next(tmp_iter) == [iterable[3]]
+    assert next(tmp_iter) == [iterable[4]]
+    assert next(tmp_iter) == [iterable[5], iterable[6]]
+
+    tmp_iter = split_iterable(iterable, 5)
+    assert next(tmp_iter) == [iterable[0]]
+    assert next(tmp_iter) == [iterable[1]]
+    assert next(tmp_iter) == [iterable[2]]
+    assert next(tmp_iter) == [iterable[3], iterable[4]]
+    assert next(tmp_iter) == [iterable[5], iterable[6]]
+
+    tmp_iter = split_iterable(iterable, 4)
+    assert next(tmp_iter) == [iterable[0]]
+    assert next(tmp_iter) == [iterable[1], iterable[2]]
+    assert next(tmp_iter) == [iterable[3], iterable[4]]
+    assert next(tmp_iter) == [iterable[5], iterable[6]]
+
+    tmp_iter = split_iterable(iterable, 3)
+    assert next(tmp_iter) == [iterable[0], iterable[1]]
+    assert next(tmp_iter) == [iterable[2], iterable[3]]
+    assert next(tmp_iter) == [iterable[4], iterable[5], iterable[6]]
+
+    tmp_iter = split_iterable(iterable, 2)
+    assert next(tmp_iter) == [iterable[0], iterable[1], iterable[2]]
+    assert next(tmp_iter) == [iterable[3], iterable[4], iterable[5],
+                              iterable[6]]
+
+    tmp_iter = split_iterable(iterable, 1)
+    assert next(tmp_iter) == [iterable[0], iterable[1], iterable[2],
+                              iterable[3], iterable[4], iterable[5],
+                              iterable[6]]
+
+
 def test_output_path_from_hash():
     from jobarchitect.utils import output_path_from_hash
 
