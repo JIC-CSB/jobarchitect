@@ -134,10 +134,11 @@ def cli():
         choices=wrapper_script_map.keys(),
         default='bash')
     parser.add_argument(
-        "--identifiers",
+        "--overlay-filter",
         default=None,
-        help="Comma separated list of identifiers to generate jobs for. \
-              If not supplied, use all identifiers.")
+        help="Overlay to use to filter identifiers to process. Only those \
+              identifiers where the overlay for that identifier has the \
+              value True will be processed.")
     args = parser.parse_args()
 
     tool_path = os.path.abspath(args.tool_path)
@@ -159,8 +160,7 @@ backend ({})""".format(args.backend))
                           args.output_path,
                           backend_function_map[args.backend],
                           args.nchunks,
-                          args.image_name,
-                          args.identifiers.split(',')))
+                          args.image_name))
     script = render_script(
         wrapper_script_map[args.wrapper_script],
         {"jobs": jobs, "partition": "rg-mh", "jobmem": 4000})
