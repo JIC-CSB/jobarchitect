@@ -92,3 +92,19 @@ def output_path_from_hash(dataset_path, hash_str, output_root):
         if item["hash"] == hash_str:
             return os.path.join(output_root, item["path"])
     raise(KeyError("File hash not in dataset"))
+
+
+def are_identifiers_in_dataset(dataset_path, identifiers):
+    """Return True if all identifiers are in the suppplied dataset. If the list
+    of identifiers is empty, also return True.
+
+    :param dataset_path: path to dataset
+    :param identifiers: list of identifiers to test
+    :returns: True if all identifiers in dataset, False otherwise.
+    """
+
+    all_dataset_identifiers = DataSet.from_path(dataset_path).identifiers
+
+    return set(identifiers).issubset(all_dataset_identifiers)
+
+

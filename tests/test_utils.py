@@ -5,6 +5,8 @@ import json
 
 import pytest
 
+from dtoolcore import DataSet
+
 from . import tmp_dir_fixture  # NOQA
 from . import TEST_SAMPLE_DATASET
 
@@ -122,3 +124,22 @@ def test_output_path_from_hash():
 
     with pytest.raises(KeyError):
         output_path_from_hash(TEST_SAMPLE_DATASET, 'nonsense', '/output')
+
+
+def test_are_identifiers_in_dataset():
+    from jobarchitect.utils import are_identifiers_in_dataset
+
+    # Empty list returns True
+    assert are_identifiers_in_dataset(TEST_SAMPLE_DATASET, [])
+
+    bad_identifier = 'a1237a1a1a61e734828f525ae7715d9c5be591496'
+    assert not are_identifiers_in_dataset(TEST_SAMPLE_DATASET, [bad_identifier])
+    
+    dataset = DataSet.from_path(TEST_SAMPLE_DATASET)
+    actual_identifiers = dataset.identifiers
+
+    assert are_identifiers_in_dataset(TEST_SAMPLE_DATASET, actual_identifiers)
+
+    extended_identifiers = actual_identifiers + [bad_identifier]
+
+    assert not are_identifiers_in_dataset(TEST_SAMPLE_DATASET, extended_identifiers)
