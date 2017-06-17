@@ -56,38 +56,52 @@ class JobSketcher(object):
             tool_path,
             dataset_path,
             output_root,
-            image_name=None,
-            identifiers=None
+            image_name=None
             ):
         self.tool_path = tool_path
         self.dataset_path = dataset_path
         self.output_root = output_root
         self.image_name = image_name
-        self.identifiers = identifiers
 
-    def _generate_jobspecs(self, nchunks):
+    def _generate_jobspecs(self, nchunks, identifiers=None):
         for jobspec in generate_jobspecs(self.tool_path,
                                          self.dataset_path,
                                          self.output_root,
                                          nchunks,
                                          image_name=self.image_name,
-                                         identifiers=self.identifiers):
+                                         identifiers=identifiers):
             yield jobspec
 
-    def sketch(self, backend, nchunks):
+    def sketch(self, backend, nchunks, identifiers=None):
         """Return generator yielding instances of :class:`jobarchitect.JobSec`.
 
         :param backend: backend function for generating job scripts
         :param nchunks: number of chunks the job should be split into
+        :param identifiers: identifiers to create jobs for
         :returns: generator yielding jobs as strings
         """
-        for jobspec in self._generate_jobspecs(nchunks):
+        if identifiers is None:
+            identifiers = DataSet.from_path(self.dataset_path).identifiers
+        for jobspec in self._generate_jobspecs(nchunks, identifiers):
             yield backend(jobspec)
+
+
+def identifiers_where_overlay_is_true(dataset, overlay_name):
+
+    overlays = dataset.access_overlays()
+
+    overlay = overlays[overlay_name]
+
+    selected = [identifier
+                for identifier in dataset.identifiers
+                if overlay[identifier]]
+
+    return selected
 
 
 def sketchjob(tool_path, dataset_path, output_root,
               backend, nchunks, image_name=None,
-              identifiers=None):
+              overlay_filter=None):
     """Return list of jobs as strings.
 
     :param tool_path: path to tool
@@ -97,13 +111,25 @@ def sketchjob(tool_path, dataset_path, output_root,
     :param nchunks: number of chunks the job should be split into
     :returns: generator yielding jobs as strings
     """
+    dataset = DataSet.from_path(dataset_path)
+
+    if overlay_filter is not None:
+
+        overlays = dataset.access_overlays()
+        if overlay_filter not in overlays:
+            raise ValueError("Overlay {} not found".format(overlay_filter))
+        identifiers = identifiers_where_overlay_is_true(
+            dataset, overlay_filter)
+    else:
+        identifiers = dataset.identifiers
+
     jobsketcher = JobSketcher(
         tool_path=tool_path,
         dataset_path=dataset_path,
         output_root=output_root,
-        image_name=image_name,
-        identifiers=identifiers)
-    for job in jobsketcher.sketch(backend, nchunks):
+        image_name=image_name)
+
+    for job in jobsketcher.sketch(backend, nchunks, identifiers):
         yield job
 
 
@@ -140,10 +166,11 @@ def cli():
         choices=wrapper_script_map.keys(),
         default='bash')
     parser.add_argument(
-        "--identifiers",
+        "--overlay-filter",
         default=None,
-        help="Comma separated list of identifiers to generate jobs for. \
-              If not supplied, use all identifiers.")
+        help="Overlay to use to filter identifiers to process. Only those \
+              identifiers where the overlay for that identifier has the \
+              value True will be processed.")
     args = parser.parse_args()
 
     tool_path = os.path.abspath(args.tool_path)
@@ -160,18 +187,14 @@ def cli():
             parser.error("""You must specify an image to use a container based
 backend ({})""".format(args.backend))
 
-    if args.identifiers is not None:
-        identifiers = args.identifiers.split(',')
-    else:
-        identifiers = None
-
     jobs = list(sketchjob(tool_path,
                           args.dataset_path,
                           args.output_path,
                           backend_function_map[args.backend],
                           args.nchunks,
                           args.image_name,
-                          identifiers))
+                          args.overlay_filter))
+
     script = render_script(
         wrapper_script_map[args.wrapper_script],
         {"jobs": jobs, "partition": "rg-mh", "jobmem": 4000})
