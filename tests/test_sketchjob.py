@@ -109,7 +109,7 @@ def test_jobsketcher_sketch():
 
 
 def test_jobsketcher_sketch_raises_with_invalid_identifiers():
-    from jobarchitect.sketchjob import JobSketcher, generate_jobspecs
+    from jobarchitect.sketchjob import JobSketcher
     from jobarchitect.backends import generate_bash_job
 
     jobsketcher = JobSketcher(

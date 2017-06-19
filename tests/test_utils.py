@@ -1,7 +1,6 @@
 """Test jobarchitect utils."""
 
 import os
-import json
 
 import pytest
 
