@@ -93,6 +93,13 @@ Try the script with::
     $ cat output/first_image.png
     290d3f1a902c452ce1c184ed793b1d6b83b59164  /private/var/folders/hn/crprzwh12kj95plc9jjtxmq82nl2v3/T/tmp_pTfc6/stg02d730c7-17a2-4d06-a017-e59e14cb8885/first_image.png
 
+Use with split
+--------------
+
+The unix command ``split`` is a good way to divide the single large output (that concatenates many command invocations) produced by sketchjob into individual files. For example::
+
+    $ split -n 60 many_slurm_scripts.slurm all_slurm_scripts/submit_segment
+
 Working with Docker
 -------------------
 
