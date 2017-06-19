@@ -43,32 +43,6 @@ def path_from_hash(dataset_path, hash_str):
     raise(KeyError("File hash not in dataset"))
 
 
-def split_dataset(dataset_path, nchunks):
-    """Return generator yielding lists of file entries.
-
-    :param dataset_path: path to input dataset
-    :param nchunks: number of chunks the dataset items should be split into
-    :returns: generator yielding lists of file entries
-    """
-    dataset_path = os.path.abspath(dataset_path)
-    dataset = DataSet.from_path(dataset_path)
-
-    file_list = dataset.manifest["file_list"]
-    num_files = len(file_list)
-    chunk_size = num_files // nchunks
-    left_over_files = num_files % nchunks
-    index = 0
-    for n in range(nchunks, 0, -1):
-        chunk = []
-        for i in range(chunk_size):
-            chunk.append(file_list[index])
-            index += 1
-        if n <= left_over_files:
-            chunk.append(file_list[index])
-            index += 1
-        yield chunk
-
-
 def split_iterable(iterable, nchunks):
     """Return generator yielding lists derived from the iterable.
 

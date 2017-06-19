@@ -6,7 +6,6 @@ import argparse
 from dtoolcore import DataSet
 
 from jobarchitect.utils import (
-    split_dataset,
     split_iterable,
     are_identifiers_in_dataset
 )
