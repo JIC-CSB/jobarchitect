@@ -11,13 +11,8 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 Added
 ^^^^^
 
-- Option to sketchjob CLI to use overlay as a filter for which identifiers will be processed
-
 Changed
 ^^^^^^^
-
-- JobSketcher.sketch() now takes a list of identifiers to process, and checks that those identifiers
-  are in the dataset.
 
 Deprecated
 ^^^^^^^^^^
@@ -33,6 +28,21 @@ Fixed
 
 Security
 ^^^^^^^^
+
+[0.7.0] - 2017-06-19
+--------------------
+
+Added
+^^^^^
+
+- Option to sketchjob CLI to use overlay as a filter for which identifiers will be processed
+
+Changed
+^^^^^^^
+
+- JobSketcher.sketch() now takes a list of identifiers to process, and checks that those identifiers
+  are in the dataset.
+
 
 [0.6.0] - 2017-06-15
 --------------------
