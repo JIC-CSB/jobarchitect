@@ -129,4 +129,3 @@ def are_identifiers_in_dataset(dataset_path, identifiers):
     all_dataset_identifiers = DataSet.from_path(dataset_path).identifiers
 
     return set(identifiers).issubset(all_dataset_identifiers)
-

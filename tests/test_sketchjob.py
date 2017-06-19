@@ -4,6 +4,8 @@ import sys
 import os
 import subprocess
 
+import pytest
+
 from dtoolcore import DataSet
 
 from . import TEST_SAMPLE_DATASET
@@ -104,6 +106,26 @@ def test_jobsketcher_sketch():
                       for jobspec in jobspec_generator]
 
     assert bash_lines == expected_lines
+
+
+def test_jobsketcher_sketch_raises_with_invalid_identifiers():
+    from jobarchitect.sketchjob import JobSketcher, generate_jobspecs
+    from jobarchitect.backends import generate_bash_job
+
+    jobsketcher = JobSketcher(
+        tool_path='smart_tool.py',
+        dataset_path=TEST_SAMPLE_DATASET,
+        output_root='/tmp/output')
+
+    identifiers = DataSet.from_path(TEST_SAMPLE_DATASET).identifiers
+    identifiers.append('garbage')
+
+    with pytest.raises(KeyError):
+        list(jobsketcher.sketch(
+                backend=generate_bash_job,
+                nchunks=1,
+                identifiers=identifiers
+        ))
 
 
 # This is a functional test.

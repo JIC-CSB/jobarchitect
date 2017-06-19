@@ -5,7 +5,12 @@ import argparse
 
 from dtoolcore import DataSet
 
-from jobarchitect.utils import split_dataset, split_iterable
+from jobarchitect.utils import (
+    split_dataset,
+    split_iterable,
+    are_identifiers_in_dataset
+)
+
 from jobarchitect.backends import (
     JobSpec,
     generate_bash_job,
@@ -80,6 +85,11 @@ class JobSketcher(object):
         :param identifiers: identifiers to create jobs for
         :returns: generator yielding jobs as strings
         """
+
+        if not are_identifiers_in_dataset(self.dataset_path, identifiers):
+            raise(KeyError(
+                "One or more supplied identifiers are not in the dataset."
+            ))
 
         for jobspec in self._generate_jobspecs(nchunks, identifiers):
             yield backend(jobspec)

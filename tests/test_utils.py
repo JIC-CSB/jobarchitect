@@ -184,8 +184,9 @@ def test_are_identifiers_in_dataset():
     assert are_identifiers_in_dataset(TEST_SAMPLE_DATASET, [])
 
     bad_identifier = 'a1237a1a1a61e734828f525ae7715d9c5be591496'
-    assert not are_identifiers_in_dataset(TEST_SAMPLE_DATASET, [bad_identifier])
-    
+    assert not are_identifiers_in_dataset(
+        TEST_SAMPLE_DATASET, [bad_identifier])
+
     dataset = DataSet.from_path(TEST_SAMPLE_DATASET)
     actual_identifiers = dataset.identifiers
 
@@ -193,4 +194,10 @@ def test_are_identifiers_in_dataset():
 
     extended_identifiers = actual_identifiers + [bad_identifier]
 
-    assert not are_identifiers_in_dataset(TEST_SAMPLE_DATASET, extended_identifiers)
+    assert not are_identifiers_in_dataset(
+        TEST_SAMPLE_DATASET, extended_identifiers)
+
+    identifiers = DataSet.from_path(TEST_SAMPLE_DATASET).identifiers
+    identifiers.append('garbage')
+
+    assert not are_identifiers_in_dataset(TEST_SAMPLE_DATASET, identifiers)
