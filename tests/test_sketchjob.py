@@ -158,7 +158,9 @@ def test_sketchjob(tmp_dir_fixture):  # NOQA
             entry["hash"],
             tmp_dir_fixture)
         assert os.path.isdir(output_path)
-        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        output_file = os.path.join(
+            output_path,
+            os.path.basename(entry["path"]))
         assert os.path.isfile(output_file)
         with open(output_file, "r") as fh:
             contents = fh.read()
@@ -192,7 +194,9 @@ def test_sketchjob_with_docker_backend(local_tmp_dir_fixture):  # NOQA
             entry["hash"],
             local_tmp_dir_fixture)
         assert os.path.isdir(output_path)
-        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        output_file = os.path.join(
+            output_path,
+            os.path.basename(entry["path"]))
         assert os.path.isfile(output_file)
         with open(output_file, "r") as fh:
             contents = fh.read()
@@ -235,7 +239,9 @@ def test_sketchjob_cli(tmp_dir_fixture):  # NOQA
             entry["hash"],
             tmp_dir_fixture)
         assert os.path.isdir(output_path)
-        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        output_file = os.path.join(
+            output_path,
+            os.path.basename(entry["path"]))
         assert os.path.isfile(output_file)
         with open(output_file, "r") as fh:
             contents = fh.read()
@@ -279,7 +285,9 @@ def test_sketchjob_cli_with_docker_backend(local_tmp_dir_fixture):  # NOQA
             entry["hash"],
             local_tmp_dir_fixture)
         assert os.path.isdir(output_path)
-        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        output_file = os.path.join(
+            output_path,
+            os.path.basename(entry["path"]))
         assert os.path.isfile(output_file)
         with open(output_file, "r") as fh:
             contents = fh.read()
@@ -324,7 +332,9 @@ def test_sketchjob_cli_with_docker_backend_with_imports(local_tmp_dir_fixture): 
             entry["hash"],
             local_tmp_dir_fixture)
         assert os.path.isdir(output_path)
-        output_file = os.path.join(output_path, os.path.basename(entry["path"]))
+        output_file = os.path.join(
+            output_path,
+            os.path.basename(entry["path"]))
         assert os.path.isfile(output_file)
         with open(output_file, "r") as fh:
             contents = fh.read()

@@ -1,12 +1,10 @@
 """Jobarchitect agent."""
 
 import os
-import json
 import argparse
 import subprocess
 
 from jobarchitect.utils import (
-    path_from_hash,
     output_path_from_hash,
     mkdir_parents
 )
@@ -24,7 +22,6 @@ class Agent(object):
         self.tool_path = os.path.abspath(tool_path)
         self.dataset_path = dataset_path
         self.output_root = output_root
-
 
     def run_tool_on_identifier(self, identifier):
         """Run the tool on an item in the dataset."""

@@ -2,9 +2,6 @@
 
 import os
 import errno
-import shutil
-import tempfile
-import contextlib
 
 from dtoolcore import DataSet
 
@@ -25,22 +22,6 @@ def mkdir_parents(path):
             pass
         else:
             raise
-
-
-def path_from_hash(dataset_path, hash_str):
-    """Return absolute path from a dataset given a hash.
-
-    :param dataset_path: path to input dataset
-    :param hash_str: dataset item identifier as a hash string
-    :returns: absolute path to dataset item
-    """
-    dataset_path = os.path.abspath(dataset_path)
-    dataset = DataSet.from_path(dataset_path)
-    data_path = os.path.join(dataset_path, dataset.data_directory)
-    for item in dataset.manifest["file_list"]:
-        if item["hash"] == hash_str:
-            return os.path.join(data_path, item["path"])
-    raise(KeyError("File hash not in dataset"))
 
 
 def split_iterable(iterable, nchunks):
@@ -85,10 +66,8 @@ def output_path_from_hash(dataset_path, hash_str, output_root):
     dataset_path = os.path.abspath(dataset_path)
     dataset = DataSet.from_path(dataset_path)
 
-    for item in dataset.manifest["file_list"]:
-        if item["hash"] == hash_str:
-            return os.path.join(output_root, item["path"])
-    raise(KeyError("File hash not in dataset"))
+    item = dataset.item_from_identifier(hash_str)
+    return os.path.join(output_root, item["path"])
 
 
 def are_identifiers_in_dataset(dataset_path, identifiers):
