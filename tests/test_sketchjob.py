@@ -4,6 +4,8 @@ import sys
 import os
 import subprocess
 
+from dtoolcore import DataSet
+
 from . import TEST_SAMPLE_DATASET
 from . import tmp_dir_fixture, local_tmp_dir_fixture  # NOQA
 from . import shasum_smart_tool
@@ -64,7 +66,12 @@ def test_jobsketcher_generate_jobspecs():
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output')
 
-    jobspecs = list(jobsketcher._generate_jobspecs(nchunks=1))
+    identifiers = DataSet.from_path(TEST_SAMPLE_DATASET).identifiers
+
+    jobspecs = list(jobsketcher._generate_jobspecs(
+        nchunks=1,
+        identifiers=identifiers
+    ))
     assert len(jobspecs) == 1
     from jobarchitect.backends import JobSpec
     assert isinstance(jobspecs[0], JobSpec)
@@ -79,7 +86,13 @@ def test_jobsketcher_sketch():
         dataset_path=TEST_SAMPLE_DATASET,
         output_root='/tmp/output')
 
-    bash_lines = list(jobsketcher.sketch(backend=generate_bash_job, nchunks=1))
+    identifiers = DataSet.from_path(TEST_SAMPLE_DATASET).identifiers
+
+    bash_lines = list(jobsketcher.sketch(
+        backend=generate_bash_job,
+        nchunks=1,
+        identifiers=identifiers
+    ))
 
     jobspec_generator = generate_jobspecs(
         tool_path='smart_tool.py',

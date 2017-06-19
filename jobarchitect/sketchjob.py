@@ -63,7 +63,7 @@ class JobSketcher(object):
         self.output_root = output_root
         self.image_name = image_name
 
-    def _generate_jobspecs(self, nchunks, identifiers=None):
+    def _generate_jobspecs(self, nchunks, identifiers):
         for jobspec in generate_jobspecs(self.tool_path,
                                          self.dataset_path,
                                          self.output_root,
@@ -72,7 +72,7 @@ class JobSketcher(object):
                                          identifiers=identifiers):
             yield jobspec
 
-    def sketch(self, backend, nchunks, identifiers=None):
+    def sketch(self, backend, nchunks, identifiers):
         """Return generator yielding instances of :class:`jobarchitect.JobSec`.
 
         :param backend: backend function for generating job scripts
@@ -80,8 +80,7 @@ class JobSketcher(object):
         :param identifiers: identifiers to create jobs for
         :returns: generator yielding jobs as strings
         """
-        if identifiers is None:
-            identifiers = DataSet.from_path(self.dataset_path).identifiers
+
         for jobspec in self._generate_jobspecs(nchunks, identifiers):
             yield backend(jobspec)
 
